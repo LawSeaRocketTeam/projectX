@@ -99,9 +99,10 @@ cc.Class({
     // },
 
     onRestartClick:function(event, customEventData){
-        this.jieSuanNode.active = false;
-        this.UINode.active = true;
+        //this.jieSuanNode.active = false;
+        //this.UINode.active = true;
         this.spBg.position = cc.v2(0,0)
+        cc.director.loadScene("loginScene");
     },
     
     onGenerateClick:function(event, customEventData){

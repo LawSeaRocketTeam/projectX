@@ -12,8 +12,21 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        icon:cc.Node,
-        operateSettingLayer : cc.Node,
+        // foo: {
+        //     // ATTRIBUTES:
+        //     default: null,        // The default value will be used only when the component attaching
+        //                           // to a node for the first time
+        //     type: cc.SpriteFrame, // optional, default is typeof default
+        //     serializable: true,   // optional, default is true
+        // },
+        // bar: {
+        //     get () {
+        //         return this._bar;
+        //     },
+        //     set (value) {
+        //         this._bar = value;
+        //     }
+        // },
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -21,22 +34,11 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        let action1 = cc.moveTo(5,cc.v2(230,287));
-        let action2 = cc.moveTo(5,cc.v2(-230,287));
-        let action3 = cc.sequence(action1,action2);
-        this.icon.runAction(cc.repeatForever(action3));
-    },
-
-    onGuanKaClick:function(event, customEventData){
-        cc.director.loadScene("gameScene");
-    },
-
-    onWuJinClick:function(event, customEventData){
 
     },
 
-    onOperaSettingClick:function(event, customEventData){
-        this.operateSettingLayer.active = true;
+    onCloseClick:function(event, customEventData){
+        this.node.active = false;
     }
 
     // update (dt) {},
