@@ -18,9 +18,15 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+     onLoad () {
+         cc.vv = {} //存储游戏全局的东西
+         var DataMgr = require("DataMgr");
+         cc.vv.dataMgr = new DataMgr();
+         
+     },
 
     start () {
+        this.operateSettingLayer.active = false
         let action1 = cc.moveTo(5,cc.v2(230,287));
         let action2 = cc.moveTo(5,cc.v2(-230,287));
         let action3 = cc.sequence(action1,action2);

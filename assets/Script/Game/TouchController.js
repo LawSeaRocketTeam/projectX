@@ -13,7 +13,6 @@ cc.Class({
 
     properties: {
         moveTouchNode : cc.Node,
-        shootTouchNode : cc.Node,
         shootNode:cc.Node,
         spBg : cc.Node,
         moveSensi : 2,      //移动灵敏度
@@ -32,6 +31,7 @@ cc.Class({
         var winSize = cc.winSize;
         var mapMgr = self.spBg.getComponent("MapMgr");
         var spBgSize = cc.size(mapMgr.max_w,mapMgr.max_h);
+        this.moveSensi = 0.4 * cc.vv.dataMgr.opSetting.sensi;
         self.moveTouchNode.on(cc.Node.EventType.TOUCH_START,function(event){
             let touches = event.getTouches();
             let touchLoc = touches[0].getLocation();

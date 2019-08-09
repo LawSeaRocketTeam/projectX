@@ -13,7 +13,6 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
     onLoad () {
         //
-        cc.vv = {};
         cc.vv.gameNode = this.node;
         //cc.game.setFrameRate(45);
         this.targetsMgr = this.getComponent("TargetsMgr");
@@ -24,16 +23,27 @@ cc.Class({
         //开启碰撞检测系统
         cc.director.getCollisionManager().enabled = true;
 
-        //修改设计区域大小
-        this.ShootTouchNode = cc.find("Canvas/ShootTouchNode");
-        this.ShootTouchNode.width = cc.winSize.width / 2;
+        //修改射击区域大小
+        this.ShootTouchLeftNode = cc.find("Canvas/ShootTouchLeftNode");
+        this.ShootTouchRightNode = cc.find("Canvas/ShootTouchRightNode");
+        this.ShootTouchLeftNode.width = cc.winSize.width / 2;
+        this.ShootTouchRightNode.width = cc.winSize.width / 2;
         //监听时间
         this.node.on("event_gameover",this._on_gameOver,this);
         //cc.director.getCollisionManager().enabledDebugDraw = true;
      },
 
     start () {
-
+        if(cc.vv.dataMgr.opSetting.op == 0){
+            //左手准星
+            this.ShootTouchLeftNode.active = true;
+            this.ShootTouchRightNode.active = false;
+        }
+        else{
+            //右手准星
+            this.ShootTouchLeftNode.active = false;
+            this.ShootTouchRightNode.active = true;
+        }
     },
 
     update (dt) {
