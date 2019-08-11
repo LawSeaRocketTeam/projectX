@@ -10,8 +10,9 @@ cc.Class({
     properties: {
         max_w:4000,     //可移动总宽
         max_h:2000,     //可移动总高
-        block_w:250,    //设置的大小要跟地图的宽整除
-        block_h:200,    //设置的大小要跟地图的高整除
+        block_w:125,    //设置的大小要跟地图的宽整除
+        block_h:125,    //设置的大小要跟地图的高整除
+        block_gen_count:4,  
         shootNode:cc.Node,
     },
 
@@ -36,6 +37,7 @@ cc.Class({
         }
         //cc.director.getCollisionManager().enabled = true;
         //console.log("map block = \n" +JSON.stringify(this.arrBlocks));
+        cc.vv.gameNode.emit("map_load_finish");
     },
     
     //获取该块九宫格内一个空闲的块(-1,+1,-blockWCount,+blockWCount,0,-blockWCount+1,blockWCount-1,-blockWCount-1,blockWCount+1)
@@ -44,6 +46,7 @@ cc.Class({
      *          -1     0     +1
      *         -bw-1  -bw   -bw+1
      */
+    //如果该点九宫格内的格都满了，则取九宫内其中一点再取下去
     _getNearEmptyBlockIdx : function(_idx){
         let tmp = [-1,1,-this.blockWCount,this.blockWCount,0,-this.blockWCount+1,this.blockWCount-1,-this.blockWCount-1,this.blockWCount+1];
         //随机打乱数组，造成每次取的相邻顺序都不一样
@@ -58,7 +61,7 @@ cc.Class({
                 return nearIdx;
             }
         }
-        return -1;
+        return this._getNearEmptyBlockIdx(_idx + tmp[0]);
     },
 
     //获取地图上某个点所在的块下标
@@ -79,6 +82,7 @@ cc.Class({
     //_type:目标类型
     //_activeTime 对于短期驻留怪，存活时间
     //_genDipTime 在同一块区生成多个时，间隔多久生成1个,默认0
+    //ret 返回生成了多少个目标
     generateTargetsInBlockByIdx :function(_idx,_radius,_count,_type,_activeTime,_genDipTime){
         _activeTime = _activeTime|| -1;
         _genDipTime = _genDipTime|| 0;  
@@ -138,20 +142,23 @@ cc.Class({
                 position[targetX][targetY].isSet = 1;
                 hasGenCount++;
                 let delayTime = hasGenCount * _genDipTime;
+                
+                let target = this.targetsMgr.getIdleTarget();
+                let targetController = target.getComponent("TargetController");
+                targetController.setBlock(block);
                 this.scheduleOnce(function() {
                     //生成目标
                     let x = block.pos.x + targetX;
                     let y = block.pos.y + targetY;
-                    var target = this.targetsMgr.getIdleTarget();
-                    var targetController = target.getComponent("TargetController");
+                    //let tc = target.getComponent("TargetController");
                     targetController.refresh(_type,cc.v2(x,y),_radius,_activeTime);
-                    targetController.setBlock(block);
                     target.parent = this.node
-                }, delayTime);
+                }.bind(this), delayTime);
             }
             //当到达数量后，则可退出循环
             if(hasGenCount == _count) break;
         }
+        return hasGenCount;
     },
 
     //在射击点九宫内寻找空白块生成驻守目标
@@ -162,10 +169,16 @@ cc.Class({
         _genDipTime = _genDipTime || 0;
         let shootCtrl = this.shootNode.getComponent("ShootController");
         let pos = shootCtrl.getShootPoint();
-        let shootBlockIdx = this.getPointInBlockIdx(pos);
-        let nearBlockIdx = this._getNearEmptyBlockIdx(shootBlockIdx);
-        if(nearBlockIdx != -1){
-            this.generateTargetsInBlockByIdx(nearBlockIdx,_radius,_count,_type,_activeTime,_genDipTime);
+        let shootBlockIdx = this.getPointInBlockIdx(pos); 
+        let hasGen = 0
+        //直到生成到目标数量为止，如果太多可能会导致卡死，因为九宫格都没位置了
+        while(hasGen < _count)
+        {
+            let nearBlockIdx = this._getNearEmptyBlockIdx(shootBlockIdx);
+            if(nearBlockIdx != -1){ 
+                let genCount = _count - hasGen < this.block_gen_count ? _count - hasGen : this.block_gen_count
+                hasGen += this.generateTargetsInBlockByIdx(nearBlockIdx,_radius,genCount,_type,_activeTime,_genDipTime);
+            }
         }
     },
 

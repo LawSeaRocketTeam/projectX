@@ -45,6 +45,10 @@ cc.Class({
                 arr.splice(index, 1);
             }
         });
+        if(this.use_targets.length == 0){
+            cc.vv.gameNode.emit("game_all_targets_clear");
+        }
+        
     },
 
     addIdleTarget : function(_target){
@@ -78,13 +82,22 @@ cc.Class({
 
     //检测是否有目标被射中
     //param1：射击坐标点
+    //ret true击中目标 false打空
     checkTargetsBeShoot : function(_shootPoint){
+        var ret = false
         this.use_targets.forEach(function(item, index, arr) {
             let tc = item.getComponent("TargetController");
             if(tc.checkIsInPoint(_shootPoint)){
                 tc.beShoot();
+                ret = true;
             }
         });
+        return ret
+    },
+
+    //返回场上的目标个数
+    getInUseTargetsCount : function(){
+        return this.use_targets.length;
     },
 
     // update (dt) {},

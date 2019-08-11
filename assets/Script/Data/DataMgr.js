@@ -7,11 +7,6 @@ var OP_SETTING_NAME = "OP_SETTING_NAME"
 cc.Class({
     extends: cc.Component,
 
-    properties: {
-        opSetting : {op:0,sensi:0}, //操作设置
-        gameSetting : {},   //游戏设置
-    },
-
     ctor : function() {
         this.opSetting = {op:0,sensi:5}; //操作设置
         this.gameSetting = {};  //游戏设置
