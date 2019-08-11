@@ -44,8 +44,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.7161458333333334,
-      "y": 0.7161458333333334,
+      "x": 0.6380208333333334,
+      "y": 0.6380208333333334,
       "z": 1
     },
     "_quat": {
@@ -132,7 +132,7 @@
   {
     "__type__": "cc.Node",
     "_name": "Canvas",
-    "_objFlags": 0,
+    "_objFlags": 512,
     "_parent": {
       "__id__": 1
     },
@@ -943,7 +943,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
+      "width": 188.99,
       "height": 50
     },
     "_anchorPoint": {
@@ -986,8 +986,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "傻逼",
-    "_N$string": "傻逼",
+    "_string": "lv_mode",
+    "_N$string": "lv_mode",
     "_fontSize": 50,
     "_lineHeight": 50,
     "_enableWrapText": true,
@@ -1217,7 +1217,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
+      "width": 191.8,
       "height": 50
     },
     "_anchorPoint": {
@@ -1260,8 +1260,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "大傻逼",
-    "_N$string": "大傻逼",
+    "_string": "el_mode",
+    "_N$string": "el_mode",
     "_fontSize": 50,
     "_lineHeight": 50,
     "_enableWrapText": true,
@@ -2088,7 +2088,7 @@
         "__id__": 90
       }
     ],
-    "_active": false,
+    "_active": true,
     "_level": 1,
     "_components": [
       {
@@ -2896,9 +2896,7 @@
     "_N$disabledSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
     },
-    "_N$target": {
-      "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
-    },
+    "_N$target": null,
     "_id": "73GKvuqgtH+Y5vqRegUS0O"
   },
   {
