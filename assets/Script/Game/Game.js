@@ -1,4 +1,5 @@
 var Common = require("Common")
+//const i18n = require('LanguageData');
 
 cc.Class({
     extends: cc.Component,
@@ -13,6 +14,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
     onLoad () {
         //
+       // i18n.init( cc.sys.language)
         cc.vv.gameNode = this.node;
         //cc.game.setFrameRate(45);
         this.targetsMgr = this.getComponent("TargetsMgr");
@@ -20,6 +22,8 @@ cc.Class({
         this.mapMgr = this.spBg.getComponent("MapMgr");
         this.jieSuanNode = cc.find("Canvas/NodeJieSuan");
         this.UINode = cc.find("Canvas/UINode");
+        this.btNode = cc.find("Canvas/Node_button");
+        this.lbHitRate = cc.find("Canvas/UINode/lb_hitValue").getComponent(cc.Label);
         //开启碰撞检测系统
         cc.director.getCollisionManager().enabled = true;
 
@@ -30,7 +34,11 @@ cc.Class({
         this.ShootTouchRightNode.width = cc.winSize.width / 2;
         //监听时间
         this.node.on("event_gameover",this._on_gameOver,this);
+        this.node.on("map_load_finish",this._mapLoadFinish,this);
+        this.node.on("game_all_targets_clear",this._allTargetClear,this);
+        this.node.on("game_set_hitrate",this._setHitRate,this)
         //cc.director.getCollisionManager().enabledDebugDraw = true;
+        //TEST模式
      },
 
     start () {
@@ -50,68 +58,49 @@ cc.Class({
 
     },
 
+    //地图管理控件加载完毕
+    _mapLoadFinish : function(){
+        if(cc.vv.sceneParam.gameMode == "test"){
+            //为操控的游戏测试模式
+            this.btNode.active = false;
+            this._testGame();
+        }
+    },
+
+    //操作测试
+    _testGame : function() {
+        //生成10个长期驻守目标
+        this.mapMgr.generateTermTargetsNearShootPos(50,10,Common.TargetType.LongTerm,-1,0);
+    },
+
+    //所有目标被清空
+    _allTargetClear : function(){
+        if(cc.vv.sceneParam.gameMode == "test"){
+            this._testGame();
+        }
+    },
+
+    //设置命中率
+    _setHitRate : function(){
+        this.lbHitRate.string = this.shootCtrl.getHitRate() + "%"
+    },
+
     _on_gameOver: function () {
         this.jieSuanNode.active = true;
         this.UINode.active = false;
         this.targetsMgr.removeAllTargets();
     },
 
-    //生成时间目标
-    //param1:目标类型(长期或者短期怪)
-    //param2：存活时间 -1为永远存活
-    //param3:移动速度
-    //param4:缩放大小
-    //生成数量
-    // _generateTermTarget : function(_type,_activeTime,_speed,_scale,_count){
-    //     if(_type != Common.TargetType.ShortTerm && _type != Common.TargetType.LongTerm){
-    //         return;
-    //     }
-    //     let target = this.targetsMgr.getIdleTarget();
-    //     let targetController = target.getComponent("TargetController");
-    //     //在射击点附近取一个点,在该点附近生成对应个数的目标
-    //     let shootPoint = this.shootCtrl.getShootPoint();
-    //     //在射击点300个像素范围内取一个点
-    //     let rangePoint = Common.randomFromPoint(shootPoint,500);
-    //     //在shootPoint指定范围内,生成怪
-    //     for(i = 0; i < _count; i++){
-    //         let genPoint = Common.randomFromPoint(rangePoint,300);
-    //         //检测节点是否跟其他目标有重叠
-    //         let target = this.targetsMgr.checkPointIsInTargets(genPoint);
-    //         if(target != undefined){
-                
-    //         }
-    //         cc.sequence(cc.delayTime(i * 0.2),cc.callFunc(function(){
-
-    //         },this,""));
-    //     }
-    //     targetController.refresh(_type,cc.v2(200,200),_activeTime,_speed,_scale);
-    //     target.parent = this.spBg
-    // },
-
-    // onGenerateLongTermClick : function()
-    // {
-    //     // var target = this.targetsMgr.getIdleTarget();
-    //     // var targetController = target.getComponent("TargetController");
-    //     // targetController.refresh(1,cc.v2(200,200),30,30,50);
-    //     // target.parent = this.spBg
-
-    //     this.mapMgr.generateTermTargetsNearShootPos(50,4,Common.TargetType.LongTerm,-1,0.2);
-    // },
-
-    // onGenerateShortTermClick : function()
-    // {
-    //     // var target = this.targetsMgr.getIdleTarget();
-    //     // var targetController = target.getComponent("TargetController");
-    //     // targetController.refresh(1,cc.v2(200,200),30,30,50);
-    //     // target.parent = this.spBg
-
-    //     this.mapMgr.generateTermTargetsNearShootPos(50,4,Common.TargetType.ShortTerm,10,0.2);
-    // },
-
     onRestartClick:function(event, customEventData){
         //this.jieSuanNode.active = false;
         //this.UINode.active = true;
-        this.spBg.position = cc.v2(0,0)
+        this.spBg.position = cc.v2(0,0)        
+        cc.director.loadScene("loginScene");
+    },
+
+    onBackClick : function(event, customEventData){
+        this.targetsMgr.removeAllTargets();
+        cc.vv.sceneParam.showLayer = "opSetting";
         cc.director.loadScene("loginScene");
     },
     

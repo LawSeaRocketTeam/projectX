@@ -35,6 +35,9 @@ cc.Class({
         g.lineTo(0, r);
         g.stroke();
         g.close();
+
+        this.shootCount = 0;    //射击次数
+        this.hitCount = 0;      //命中次数
     },
 
     start () {
@@ -53,7 +56,15 @@ cc.Class({
     //射击
     shootTarget : function(){
        //检测射击点是否在目标内
-       this.targetsMgr.checkTargetsBeShoot(this.getShootPoint());
+       this.shootCount++;
+       if(this.targetsMgr.checkTargetsBeShoot(this.getShootPoint())){
+           this.hitCount++;
+       }
+       cc.vv.gameNode.emit("game_set_hitrate")
+    },
+
+    getHitRate : function(){
+        return Math.floor(this.hitCount / this.shootCount * 100);
     }
 
     // update (dt) {},
