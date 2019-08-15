@@ -19,13 +19,13 @@ cc.Class({
         //let data = ConfigMgr.getJsonData("room")
         //cc.log("data : " + JSON.stringify(data))
 
-        for(let i = 1; i <= 8; i++)
+        for(let i = 1; i <= 15; i++)
         {
             //let itemInfo = data.children[i - 1]
            // cc.log("itemInfo : " + JSON.stringify(itemInfo))
            // if(itemInfo.desc != "暂缺")
            // {
-                this.rpMgr.addItem(1,"1")
+                this.rpMgr.addItem(1,i)
            // }
            // else
           //  {
