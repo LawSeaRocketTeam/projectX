@@ -31,7 +31,9 @@ cc.Class({
           //  {
            //     this.rpMgr.addItem(2)
           //  }
-        }
+        }	
+        this.pageView.scrollToTop();
+        //this.pageView.
     },
 
     // update (dt) {},

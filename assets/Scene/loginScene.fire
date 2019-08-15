@@ -44,8 +44,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.31208263722540236,
-      "y": 0.31208263722540236,
+      "x": 0.5134605380265007,
+      "y": 0.5134605380265007,
       "z": 1
     },
     "_quat": {
@@ -154,7 +154,7 @@
     "_level": 1,
     "_components": [
       {
-        "__id__": 116
+        "__id__": 115
       }
     ],
     "_prefab": null,
@@ -4055,10 +4055,10 @@
     "_level": 1,
     "_components": [
       {
-        "__id__": 114
+        "__id__": 113
       },
       {
-        "__id__": 115
+        "__id__": 114
       }
     ],
     "_prefab": null,
@@ -4132,9 +4132,6 @@
       },
       {
         "__id__": 112
-      },
-      {
-        "__id__": 113
       }
     ],
     "_prefab": null,
@@ -4204,9 +4201,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 28,
-      "g": 172,
-      "b": 218,
+      "r": 235,
+      "g": 244,
+      "b": 247,
       "a": 255
     },
     "_contentSize": {
@@ -4459,13 +4456,13 @@
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
+      "x": 0,
+      "y": 0
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
+      "x": -512,
+      "y": -384,
       "z": 0
     },
     "_scale": {
@@ -4546,7 +4543,7 @@
     "_N$spacingY": 0,
     "_N$verticalDirection": 1,
     "_N$horizontalDirection": 0,
-    "_N$affectedByScale": false,
+    "_N$affectedByScale": true,
     "_id": "42qVCiCJdO8q1lknvr0H+U"
   },
   {
@@ -4714,33 +4711,6 @@
     "_id": "37DanfHlRLyJQZl+0Qk+VJ"
   },
   {
-    "__type__": "cc.Widget",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 98
-    },
-    "_enabled": true,
-    "alignMode": 1,
-    "_target": null,
-    "_alignFlags": 45,
-    "_left": 0,
-    "_right": 0,
-    "_top": 0,
-    "_bottom": 0,
-    "_verticalCenter": 0,
-    "_horizontalCenter": 0,
-    "_isAbsLeft": true,
-    "_isAbsRight": true,
-    "_isAbsTop": true,
-    "_isAbsBottom": true,
-    "_isAbsHorizontalCenter": true,
-    "_isAbsVerticalCenter": true,
-    "_originalWidth": 1024,
-    "_originalHeight": 768,
-    "_id": "6eXealG9ZA5aUYTHB5yXCH"
-  },
-  {
     "__type__": "45782TuGVJAlbrmwibhiwAz",
     "_name": "",
     "_objFlags": 0,
@@ -4751,6 +4721,10 @@
     "item_prefab": {
       "__uuid__": "9f236bef-3db4-442c-9f20-3629239224cc"
     },
+    "MAX_COLOUM": 5,
+    "MAX_PAGE_COUNT": 10,
+    "GAP_W": 30,
+    "GAP_H": 100,
     "_id": "12N7T1U45PSoAMZSFYEaSq"
   },
   {

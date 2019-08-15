@@ -8,6 +8,10 @@ cc.Class({
             type:cc.Prefab,
             default:null,
         },
+        MAX_COLOUM:5,        //列数
+        MAX_PAGE_COUNT:10,       //每页可显示最多个数
+        GAP_W:30,               //格子宽间距
+        GAP_H:50,              //格子高间距
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -16,8 +20,6 @@ cc.Class({
         this.content = cc.find("view/content",this.node);
         this.itemList = []
         this.pageCount = 1
-        this.MAX_PAGE_COUNT = 10
-        this.MAX_COLOUM = 5
     },
 
     start () {
@@ -51,7 +53,7 @@ cc.Class({
         if(curPage > this.pageCount)
         {
             cc.log("!!!!!!!!!!!!!!!!!!!!!!!!!add page")
-            let content = cc.find("view/content",this.node)
+           // let content = cc.find("view/content",this.node)
             let page1 = cc.find("view/content/page_1",this.node)
             let newPage = cc.instantiate(page1)
             newPage.removeAllChildren()
@@ -61,7 +63,6 @@ cc.Class({
             //this.content.add(newPage,1,name)
             newPage.name = "page_" + curPage
             this.node.getComponent(cc.PageView).addPage(newPage)
-            content.height += newPage.height;
         }
         let pageUrl = "view/content/page_" + this.pageCount
         let page = cc.find(pageUrl,this.node)
@@ -71,10 +72,10 @@ cc.Class({
         {
             idx = this.MAX_PAGE_COUNT
         }
-        let initPosX = -312
-        let initPosY = 150
-        let gapW = 30
-        let gapH = 244
+        let initPosX = 180
+        let initPosY = 550
+        let gapW = this.GAP_W
+        let gapH = this.GAP_H
         let row = Math.ceil(idx / this.MAX_COLOUM)
         let col = idx % this.MAX_COLOUM
         let itemBg = itemPrefab.getChildByName("bg")
