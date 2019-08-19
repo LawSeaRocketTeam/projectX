@@ -3,7 +3,7 @@
 var encrypt = require("encryptjs");
 var secretkey = "project_x_20190809"
 var OP_SETTING_NAME = "OP_SETTING_NAME"
-var GUAN_QIA_DATA_FILENAME = "Resource/Json/chooseData.json"
+var GUANQIA_DATA_NAME = "GUANQIA_DATA"
 
 
 cc.Class({
@@ -18,11 +18,24 @@ cc.Class({
             this.opSetting.op = opSettingData.op;
             this.opSetting.sensi = opSettingData.sensi;
         }
-
-        //从文件读取关卡数据
-        cc.loader.loadRes("Resource/Json/chooseData",function(err,jsonAsset){
-            this.guanQiaData = jsonAsset.json;
-        })
+        //游戏关卡数据
+        let gqData = cc.sys.localStorage.getItem(GUANQIA_DATA_NAME);
+        if(gqData != undefined){
+            this.guanQiaData = JSON.parse(encrypt.decrypt(gqData,secretkey,256));
+        }
+        else{
+            //每个关卡是一个集合，一个集合有10个项
+            this.guanQiaData = [];
+            let util = [];
+            for(let i = 0; i < 10; i++){
+                let item = {star:0};
+                if(i == 0){
+                    item.star = 1;
+                }
+                util.push(item);
+            }
+            this.guanQiaData.push(util);
+        }
     },
 
     //存储操作模式
@@ -35,12 +48,10 @@ cc.Class({
     },
 
     //存储关卡数据到文件
-    saveGuanQiaDataToFile(){
-        if(cc.sys.isNative) {
-            //cc.log("Path:"+jsb.fileUtils.getWritablePath());
-            jsb.fileUtils.writeToFile(this.guanQiaData,jsb.fileUtils.getWritablePath() + GUAN_QIA_DATA_FILENAME);
-            //cc.log("fullPathForFilename:"+jsb.fileUtils.fullPathForFilename("resources/data.json"));
-         }
+    saveGuanQiaData : function(){
+        let jsonData = JSON.stringify(this.guanQiaData);
+        let encryData = encrypt.encrypt(jsonData,secretkey,256);
+        cc.sys.localStorage.setItem(GUANQIA_DATA_NAME,encryData);
     }
 
 });

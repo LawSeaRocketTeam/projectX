@@ -15,25 +15,21 @@ cc.Class({
     },
 
     start () {
-        //let ConfigMgr = cc.find("MgrNode").getComponent("ConfigMgr")
-        //let data = ConfigMgr.getJsonData("room")
-        //cc.log("data : " + JSON.stringify(data))
-
-        for(let i = 1; i <= 15; i++)
+        let data = cc.vv.dataMgr.guanQiaData;
+        for(let i = 0; i < data.length; i++)
         {
-            //let itemInfo = data.children[i - 1]
-           // cc.log("itemInfo : " + JSON.stringify(itemInfo))
-           // if(itemInfo.desc != "暂缺")
-           // {
-                this.rpMgr.addItem(1,i)
-           // }
-           // else
-          //  {
-           //     this.rpMgr.addItem(2)
-          //  }
+            let util = data[i];
+            for(let j = 0; j < util.length; j++){
+                let item = util[j];
+                if(item.star > 0){
+                    this.rpMgr.addItem(1,i+1)
+                }
+                else{
+                    this.rpMgr.addItem(2)
+                }
+            }
         }	
         this.pageView.scrollToTop();
-        //this.pageView.
     },
 
     // update (dt) {},
