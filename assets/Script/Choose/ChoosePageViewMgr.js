@@ -8,6 +8,8 @@ cc.Class({
             type:cc.Prefab,
             default:null,
         },
+        starSpFrame:cc.SpriteFrame,
+        starDiSpFrame:cc.SpriteFrame,
         MAX_COLOUM:5,        //列数
         MAX_PAGE_COUNT:10,       //每页可显示最多个数
         GAP_W:30,               //格子宽间距
@@ -30,22 +32,41 @@ cc.Class({
         Func: 添加item
         p1:显示类型，1.开启状态 2.关闭状态
         p2:开启状态下的显示文本
+        p3:星星等级
     */
-    addItem : function(_type,_content){
+    addItem : function(_type,_content,_starLevel){
         
         let itemPrefab = cc.instantiate(this.item_prefab);
         let label = cc.find("bg/l_guanqia",itemPrefab)
         let img_suo = cc.find("bg/suo",itemPrefab)
+        let node_star = cc.find("bg/nStar",itemPrefab)
         if(_type == 1)
         {
             img_suo.active = false
             label.active = true
+            node_star.active = true
             label.getComponent(cc.Label).string = _content
+           // let spFrameStar = new cc.SpriteFrame(cc.url.raw("resources/SceneRes/Choose/star.png"));
+           // let spFrameStarDi = new cc.SpriteFrame(cc.url.raw("resources/SceneRes/Choose/xignxing_di.png"));
+            for(let i = 1; i <= 3; i++){
+                let spStar = cc.find("star" + i,node_star).getComponent(cc.Sprite);
+                if(i <= _starLevel){
+                   // cc.loader.loadRes("SceneRes/Choose/star",cc.SpriteFrame,function(err,spriteFrame){
+                        spStar.spriteFrame = this.starSpFrame;
+                    //});
+                }
+                else{
+                    //cc.loader.loadRes("SceneRes/Choose/xignxing_di",cc.SpriteFrame,function(err,spriteFrame){
+                        spStar.spriteFrame = this.starDiSpFrame;
+                    //});
+                }
+            }
         }
         else if(_type == 2)
         {
             img_suo.active = true
             label.active = false
+            node_star.active = false
         }
         this.itemList.push(itemPrefab)
         //以下是排版代码
