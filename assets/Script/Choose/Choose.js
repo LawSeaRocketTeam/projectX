@@ -66,7 +66,8 @@ cc.Class({
             this.refreshPageView();
         }
         else{
-            console.log("星星不足，不能解锁第" + idx + "集合，没获得三星的关卡都可以获取星星哦");
+            //console.log("星星不足，不能解锁第" + idx + "集合，没获得三星的关卡都可以获取星星哦");
+            cc.vv.msgBox.show(this.node,"没获得三星的关卡都可以获取星星哦");
         }
         
     },

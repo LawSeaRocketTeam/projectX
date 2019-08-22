@@ -23,6 +23,8 @@ cc.Class({
         cc.vv.sceneParam = {};   //游戏场景参数，全局，用作场景间参数传递
         cc.vv.i18n = require('LanguageData');//注意运行时必须保证 i18n.init(language) 在包含有 LocalizedLabel 组件的场景加载前执行
         cc.vv.i18n.init(cc.sys.language);   //  在全局初始化且保存好是最好了，不然每个脚本引入i18n都要初始化一次才行，太麻烦了
+        var MsgBox = require("MsgBox");
+        cc.vv.msgBox = new MsgBox();
      },
 
     start () {
