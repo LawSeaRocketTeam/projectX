@@ -13,6 +13,7 @@ cc.Class({
     properties: {
         icon:cc.Node,
         operateSettingLayer : cc.Node,
+        chooseLayer : cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -33,7 +34,7 @@ cc.Class({
         else{
             this.operateSettingLayer.active = false;
         }
-            
+        this.chooseLayer.active = false;    
         let action1 = cc.moveTo(5,cc.v2(230,287));
         let action2 = cc.moveTo(5,cc.v2(-230,287));
         let action3 = cc.sequence(action1,action2);
@@ -41,7 +42,8 @@ cc.Class({
     },
 
     onGuanKaClick:function(event, customEventData){
-        cc.director.loadScene("gameScene");
+        //cc.director.loadScene("gameScene");
+        this.chooseLayer.active = true;
     },
 
     onWuJinClick:function(event, customEventData){

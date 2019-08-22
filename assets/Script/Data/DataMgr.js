@@ -26,15 +26,7 @@ cc.Class({
         else{
             //每个关卡是一个集合，一个集合有10个项
             this.guanQiaData = [];
-            let util = [];
-            for(let i = 0; i < 10; i++){
-                let item = {star:0};
-                if(i == 0){
-                    item.star = 1;
-                }
-                util.push(item);
-            }
-            this.guanQiaData.push(util);
+            this.addGuanQiaUtil();
         }
     },
 
@@ -45,6 +37,19 @@ cc.Class({
         let jsonData = JSON.stringify(this.opSetting);
         let encryData = encrypt.encrypt(jsonData,secretkey,256);
         cc.sys.localStorage.setItem(OP_SETTING_NAME,encryData);
+    },
+
+    //添加关卡集合初始数据
+    addGuanQiaUtil : function(){
+        let util = [];
+        for(let i = 0; i < 10; i++){
+            let item = {star:0};
+            if(i == 0){
+                item.star = 1;
+            }
+            util.push(item);
+        }
+        this.guanQiaData.push(util);
     },
 
     //存储关卡数据到文件
