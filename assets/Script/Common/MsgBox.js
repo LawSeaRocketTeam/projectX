@@ -19,7 +19,7 @@ cc.Class({
 
     },
 
-    show : function(_parent,_text,_leftBtTxt,_leftFunc,_rightBtTxt,_rightFunc){
+    show : function(_parent,_content,_title,_leftBtTxt,_leftFunc,_rightBtTxt,_rightFunc){
         let onResourceLoaded = function(errorMessage, loadedResource )
         {
            
@@ -29,7 +29,7 @@ cc.Class({
             _parent.addChild(newMyPrefab);
             newMyPrefab.position = cc.v2(0, 0);
             var newMyPrefabScript = newMyPrefab.getComponent('MsgBoxController');
-            newMyPrefabScript.show(_text,_leftBtTxt,_leftFunc,_rightBtTxt,_rightFunc);
+            newMyPrefabScript.show(_content,_title,_leftBtTxt,_leftFunc,_rightBtTxt,_rightFunc);
         };
         cc.loader.loadRes('Prefab/msgbox', onResourceLoaded );
     }

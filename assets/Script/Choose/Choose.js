@@ -67,7 +67,11 @@ cc.Class({
         }
         else{
             //console.log("星星不足，不能解锁第" + idx + "集合，没获得三星的关卡都可以获取星星哦");
-            cc.vv.msgBox.show(this.node,"没获得三星的关卡都可以获取星星哦");
+            // let sureFunc = function(event, customEventData){
+            //     cc.log("点击事件测试")
+            // };
+            // cc.vv.msgBox.show(this.node,cc.vv.i18n.t("mb_more_star"),"测试","确定",sureFunc);
+            cc.vv.msgBox.show(this.node,cc.vv.i18n.t("mb_more_star"));
         }
         
     },

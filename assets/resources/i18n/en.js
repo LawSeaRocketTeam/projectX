@@ -18,5 +18,7 @@ window.i18n.languages['en'] = {
     "op_mode" : "Operational Mode",
     "lv_mode" : "Level Mode",
     "el_mode" : "Endless Mode",
-
+    "mb_more_star" : "Can get star from the task that not get three star",
+    "sure" : "Sure",
+    "cancel" : "Cancel",
 };
