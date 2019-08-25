@@ -47,7 +47,7 @@ cc.Class({
     },
 
     onWuJinClick:function(event, customEventData){
-
+        cc.vv.msgBox.show(this.node,"尚未开启,敬请期待")
     },
 
     onOperaSettingClick:function(event, customEventData){

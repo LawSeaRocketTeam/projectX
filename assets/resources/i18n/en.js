@@ -21,4 +21,6 @@ window.i18n.languages['en'] = {
     "mb_more_star" : "Can get star from the task that not get three star",
     "sure" : "Sure",
     "cancel" : "Cancel",
+    "game_task_indrodce_title" : "Task Target",
+    "game_task_info_content1" : "Kill {0} targets in {1} second"
 };

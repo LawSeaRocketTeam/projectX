@@ -80,6 +80,18 @@ var Common = cc.Class({
             let dirVec = comVec.rotate(-radian);    // 将对比向量旋转给定的弧度返回一个新的向量
             return dirVec;
         },
+
+        //字符串格式化
+        stringFormat : function() {
+            if( arguments.length == 0 )
+                return null; 
+            var str = arguments[0]; 
+            for(var i=1;i<arguments.length;i++) {
+                var re = new RegExp('\\{' + (i-1) + '\\}','gm');
+                str = str.replace(re, arguments[i]);
+            }
+            return str;
+        }, 
     }
 });
 

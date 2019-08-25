@@ -21,4 +21,6 @@ window.i18n.languages['zh'] = {
     "mb_more_star" : "没获得三星的关卡都可以获取星星哦",
     "sure" : "确定",
     "cancel" : "取消",
+    "game_task_info_title" : "关卡目标",
+    "game_task_info_content1" : "{0}秒内击杀{1}个目标",
 };

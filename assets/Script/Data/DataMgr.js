@@ -18,16 +18,53 @@ cc.Class({
             this.opSetting.op = opSettingData.op;
             this.opSetting.sensi = opSettingData.sensi;
         }
-        //游戏关卡数据
-        let gqData = cc.sys.localStorage.getItem(GUANQIA_DATA_NAME);
-        if(gqData != undefined){
-            this.guanQiaData = JSON.parse(encrypt.decrypt(gqData,secretkey,256));
-        }
-        else{
-            //每个关卡是一个集合，一个集合有10个项
-            this.guanQiaData = [];
-            this.addGuanQiaUtil();
-        }
+        //读取关卡配置
+        var self = this;
+        cc.loader.loadRes('config/GuanQia', function (err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            self.configGuanQiaData = data.json.children;
+            //游戏用户关卡数据
+            let gqData = cc.sys.localStorage.getItem(GUANQIA_DATA_NAME);
+            if(gqData != undefined){
+                self.guanQiaData = JSON.parse(encrypt.decrypt(gqData,secretkey,256));
+            }
+            else{
+                //如果是空,则添加关卡的第一个集合
+                self.guanQiaData = [];
+                self.addGuanQiaUtil(1);
+            }
+        });
+        cc.loader.loadRes('config/Monster', function (err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            self.configMonsterData = data.json;
+        });
+        cc.loader.loadRes('config/Man', function (err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            self.configManData = data.json;
+        });
+        cc.loader.loadRes('config/Fort', function (err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            self.configFortData = data.json;
+        });
+        cc.loader.loadRes('config/Supply', function (err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            self.configSupplyData = data.json;
+        });
     },
 
     //存储操作模式
@@ -40,16 +77,22 @@ cc.Class({
     },
 
     //添加关卡集合初始数据
-    addGuanQiaUtil : function(){
+    //_idx : 关卡集合下标
+    //ret : 添加是否成功
+    addGuanQiaUtil : function(_idx){
+        let guankaCfgUtil = this.getGuanKaUtilByIdx(_idx);
+        if(guankaCfgUtil.length == 0)
+            return false
         let util = [];
         for(let i = 0; i < 10; i++){
-            let item = {star:0};
+            let item = {star:-1};
             if(i == 0){
-                item.star = 1;
+                item.star = 0;
             }
             util.push(item);
         }
         this.guanQiaData.push(util);
+        return true;
     },
 
     //存储关卡数据到文件
@@ -57,6 +100,66 @@ cc.Class({
         let jsonData = JSON.stringify(this.guanQiaData);
         let encryData = encrypt.encrypt(jsonData,secretkey,256);
         cc.sys.localStorage.setItem(GUANQIA_DATA_NAME,encryData);
-    }
+    },
+
+    //根据下标(页面)获取一个关卡集
+    getGuanKaUtilByIdx : function(_idx){
+        let utils = [];
+        for(let k in this.configGuanQiaData){
+            let v = this.configGuanQiaData[k];
+            let x = Math.floor(v.gId / 1000);
+            if(x == _idx){
+                utils.push(v);
+            }
+        }
+        return utils;
+    },
+
+    //根据关卡ID获取配置中的关卡数据
+    getGuanQiaCfgDataById : function(_gid){
+        for(let k in this.configGuanQiaData){
+            let v = this.configGuanQiaData[k];
+            if(v.gId == _gid){
+                return v;
+            }
+        }
+        return undefined;
+    },
+
+    //根据怪物的集合ID获取怪物集合
+    getMonsterCfgDataByUid : function(_uid){
+        let monsters = [];
+        for(let k in this.configMonsterData.children){
+            let v = this.configMonsterData.children[k];
+            if(v.uMonsterId == _uid){
+                monsters.push(v);
+            }
+        }
+        return monsters;
+    },
+
+    //根据平民的集合ID获取平民集合
+    getMenCfgDataByUid : function(_uid){
+        let men = [];
+        for(let k in this.configManData.children){
+            let v = this.configManData.children[k];
+            if(v.uManId == _uid){
+                men.push(v);
+            }
+        }
+        return men;
+    },
+
+    //根据补给的集合ID获取补给集合
+    getSupplyCfgDataByUid : function(_uid){
+        let supply = [];
+        for(let k in this.configSupplyData.children){
+            let v = this.configSupplyData.children[k]
+            if(v.uSuplyId == _uid){
+                supply.push(v);
+            }
+        }
+        return supply;
+    },
 
 });

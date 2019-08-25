@@ -43,8 +43,11 @@ cc.Class({
         let label = cc.find("bg/l_guanqia",itemPrefab)
         let img_suo = cc.find("bg/suo",itemPrefab)
         let node_star = cc.find("bg/nStar",itemPrefab)
-        itemPrefab.uIdx = _uIdx;
-        itemPrefab.gIdx = _gIdx;
+        //itemPrefab.uIdx = _uIdx;
+        //itemPrefab.gIdx = _gIdx;
+        //itemPrefab.starLevel = _starLevel;
+        let sId = _starLevel < 3 ? _starLevel + 1 : _starLevel  //最低是0星
+        let cfgId = _uIdx * 1000 + _gIdx * 10 + sId; //关卡配置ID
         if(_type == 1)
         {
             img_suo.active = false
@@ -127,7 +130,8 @@ cc.Class({
         let clickEventHandler = new cc.Component.EventHandler();
         clickEventHandler.target = this.chooseNode;
         clickEventHandler.component = "Choose";
-        clickEventHandler.handler = "OnPageViewItemClick"
+        clickEventHandler.handler = "OnPageViewItemClick";
+        clickEventHandler.customEventData = cfgId;
         let button = itemPrefab.getComponent(cc.Button);
         button.clickEvents.push(clickEventHandler);
     }

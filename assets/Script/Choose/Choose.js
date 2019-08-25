@@ -27,8 +27,8 @@ cc.Class({
             let util = data[i];
             for(let j = 0; j < util.length; j++){
                 let item = util[j];
-                if(item.star > 0){
-                    this.rpMgr.addItem(1,j+1,item.star,i,j)
+                if(item.star >= 0){
+                    this.rpMgr.addItem(1,j+1,item.star,i+1,j+1)
                 }
                 else{
                     this.rpMgr.addItem(2,i,j)
@@ -49,7 +49,7 @@ cc.Class({
         let starCount = 0;
         for(let j = 0; j < curUtil.length; j++){
             let item = curUtil[j];
-            if(item.star == 0)
+            if(item.star <= 0)
                return false;
             starCount += item.star;
         }
@@ -62,8 +62,8 @@ cc.Class({
         let idx = this.pageView.getCurrentPageIndex()+2;
         if(this.checkIsCanOpenNextUtils()){
             //添加新的集合，隐藏当前页面锁
-            cc.vv.dataMgr.addGuanQiaUtil();
-            this.refreshPageView();
+            if(cc.vv.dataMgr.addGuanQiaUtil(idx))
+                this.refreshPageView();
         }
         else{
             //console.log("星星不足，不能解锁第" + idx + "集合，没获得三星的关卡都可以获取星星哦");
@@ -73,10 +73,13 @@ cc.Class({
             // cc.vv.msgBox.show(this.node,cc.vv.i18n.t("mb_more_star"),"测试","确定",sureFunc);
             cc.vv.msgBox.show(this.node,cc.vv.i18n.t("mb_more_star"));
         }
-        
     },
 
     OnPageViewItemClick: function(event,customEventData){
+        //cc.log("OnPageViewItemClick :" + customEventData);
+        let id = customEventData
+        cc.vv.sceneParam.gameMode = "guanka";
+        cc.vv.sceneParam.id = id;
         cc.director.loadScene("gameScene");
     },
 

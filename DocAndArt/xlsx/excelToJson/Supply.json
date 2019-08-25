@@ -1,0 +1,20 @@
+{
+    "title": "F:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx",
+    "rows": 2,
+    "children": [
+        {
+            "uSuplyId": 301,
+            "suplyId": 30001,
+            "img": "",
+            "isGenOnStart": 0,
+            "initGenTime": 1,
+            "refreshInterval": 5,
+            "showRate": 0,
+            "maxlimitCount": 1,
+            "suplyTime": 10,
+            "suplyBullet": -1,
+            "isDisappear": 1,
+            "delta": 5
+        }
+    ]
+}
