@@ -11,6 +11,9 @@ if (!window.i18n.languages) {
 window.i18n.languages['en'] = {
     // write your key value pairs here
     "hit_rate" : "Hit Rate:",
+    "game_time" : "Time:",
+    "bullet_count" : "Bullet Residual:",
+    "miss_count" : "Miss Residual:",
     "sensitivity" : "Sensitivity",
     "left_hand" : "LH quasi-star",
     "right_hand" : "RH quasi-star",

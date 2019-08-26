@@ -2,8 +2,8 @@
 var Common = cc.Class({
     statics:{      
         TargetType : {
-            ShortTerm:1,        //短期固定怪 可触发游戏结束 
-            LongTerm:2,         //长期固定怪 
+            LongTerm:1,        //短期固定怪 可触发游戏结束 
+            ShortTerm:2,         //长期固定怪 
             Move:3,             //直线轨迹移动怪
             HideMove:4,         //隐身直线轨迹移动怪
             RandomMove:5,       //随机移动怪

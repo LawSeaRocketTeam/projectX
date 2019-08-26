@@ -27,11 +27,11 @@ cc.Class({
             target = cc.instantiate(this.targetPrefab);
             target.name = "tPrefab" + TargetIdx++;
             //var targetController = target.getComponent("TargetController");
-            console.log("create new node");
+            //console.log("create new node");
             //return target;
         }
         else{
-            console.log("get cached_targets");
+            //console.log("get cached_targets");
             target = this.cached_targets.get();
         }
         this.use_targets.push(target);

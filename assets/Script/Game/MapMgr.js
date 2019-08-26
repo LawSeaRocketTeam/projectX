@@ -51,7 +51,7 @@ cc.Class({
         let tmp = [-1,1,-this.blockWCount,this.blockWCount,0,-this.blockWCount+1,this.blockWCount-1,-this.blockWCount-1,this.blockWCount+1];
         //随机打乱数组，造成每次取的相邻顺序都不一样
         tmp.sort(function(){return Common.seededRandom() > 0.5 ? -1:1;})
-        console.log("----------------tmp array = " + tmp);
+        //console.log("----------------tmp array = " + tmp);
         for(let v of tmp){
             let nearIdx = _idx + v;
             if(nearIdx >= this.arrBlocks.length || nearIdx < 0){

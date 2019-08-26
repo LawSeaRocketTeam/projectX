@@ -11,6 +11,9 @@ if (!window.i18n.languages) {
 window.i18n.languages['zh'] = {
     // write your key value pairs here
     "hit_rate" : "命中率:",
+    "game_time" : "时间:",
+    "bullet_count" : "子弹剩余量:",
+    "miss_count" : "失误剩余次数:",
     "sensitivity" : "灵敏度",
     "left_hand" : "左手准星",
     "right_hand" : "右手准星",
