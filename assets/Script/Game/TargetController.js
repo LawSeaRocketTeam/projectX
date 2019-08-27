@@ -109,6 +109,11 @@ cc.Class({
         }
     },
 
+    //设置目标ID
+    setId : function(_id){
+        this.id = _id;
+    },
+
     //设置自己在地图上的哪个块区,适用于驻留目标
     setBlock : function(_block){
         this.block = _block;
@@ -369,6 +374,8 @@ cc.Class({
             //播放受击动画，消失
             var finished = cc.callFunc(function () {
                 this.targetsMgr.addIdleTarget(this.node);
+                this.targetsMgr.addBeKillId(this.id);
+                cc.vv.gameNode.emit("game_kill_target");
             }, this, "");
             var myAction = cc.sequence(cc.blink(0.3,2),cc.fadeOut(0.5), finished);
             this.node.runAction(myAction);

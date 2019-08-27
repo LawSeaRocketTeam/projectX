@@ -83,7 +83,7 @@ cc.Class({
     //_activeTime 对于短期驻留怪，存活时间
     //_genDipTime 在同一块区生成多个时，间隔多久生成1个,默认0
     //ret 返回生成了多少个目标
-    generateTargetsInBlockByIdx :function(_idx,_radius,_count,_type,_activeTime,_genDipTime){
+    generateTargetsInBlockByIdx :function(_id,_idx,_radius,_count,_type,_activeTime,_genDipTime){
         _activeTime = _activeTime|| -1;
         _genDipTime = _genDipTime|| 0;  
         let block = this.arrBlocks[_idx];
@@ -146,6 +146,7 @@ cc.Class({
                 let target = this.targetsMgr.getIdleTarget();
                 let targetController = target.getComponent("TargetController");
                 targetController.setBlock(block);
+                targetController.setId(_id);
                 this.scheduleOnce(function() {
                     //生成目标
                     let x = block.pos.x + targetX;
@@ -164,7 +165,7 @@ cc.Class({
     //在射击点九宫内寻找空白块生成驻守目标
     //_activeTime 对于短期驻留怪，存活时间
     //_genDipTime 在同一块区生成多个时，间隔多久生成1个,默认0
-    generateTermTargetsNearShootPos : function(_radius,_count,_type,_activeTime,_genDipTime){
+    generateTermTargetsNearShootPos : function(_id,_radius,_count,_type,_activeTime,_genDipTime){
         _activeTime = _activeTime || -1; 
         _genDipTime = _genDipTime || 0;
         let shootCtrl = this.shootNode.getComponent("ShootController");
@@ -177,7 +178,7 @@ cc.Class({
             let nearBlockIdx = this._getNearEmptyBlockIdx(shootBlockIdx);
             if(nearBlockIdx != -1){ 
                 let genCount = _count - hasGen < this.block_gen_count ? _count - hasGen : this.block_gen_count
-                hasGen += this.generateTargetsInBlockByIdx(nearBlockIdx,_radius,genCount,_type,_activeTime,_genDipTime);
+                hasGen += this.generateTargetsInBlockByIdx(_id,nearBlockIdx,_radius,genCount,_type,_activeTime,_genDipTime);
             }
         }
     },

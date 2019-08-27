@@ -11,12 +11,19 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.cached_targets = new cc.NodePool();
-        this.use_targets = [];  // 正在场上的节点
+        
     },
 
     start () {
-        
+        this.cached_targets = new cc.NodePool();
+        this.use_targets = [];  // 正在场上的节点
+        this.beKilled_targetsId = [];
+    },
+
+    refresh : function(){
+        this.cached_targets.clear();
+        this.use_targets.length = 0;
+        this.beKilled_targetsId.length = 0;
     },
 
     //获取处于闲置状态的target
@@ -100,9 +107,46 @@ cc.Class({
         return this.use_targets.length;
     },
 
+    //统计被击杀的目标
+    addBeKillId : function(_id){
+        let bFind = false;
+        for(let i in this.beKilled_targetsId){
+            let v = this.beKilled_targetsId[i];
+            if(v.id == _id){
+                v.count++;
+            }
+        }
+        if(!bFind){
+            let tmp = {id:_id,count:1}
+            this.beKilled_targetsId.push(tmp);
+        }
+    },
+
+    //获取指定目标被击杀的个数
+    getBeKillCountById : function(_id){
+        for(let i in this.beKilled_targetsId){
+            let v = this.beKilled_targetsId[i];
+            if(v.id == _id){
+                return v.count;
+            }
+        }
+        return 0;
+    },
+
+    //获取被击杀的所有目标的个数
+    getBeKillCount : function(){
+        let sum = 0;
+        for(let i in this.beKilled_targetsId){
+            let v = this.beKilled_targetsId[i];
+            sum += v.count;
+        }
+        return sum;
+    },
+
     // update (dt) {},
 
     onDestroy() {
         this.cached_targets.clear();
+        this.beKilled_targetsId.length = 0;
     }
 });

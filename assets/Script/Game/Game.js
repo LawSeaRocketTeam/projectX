@@ -33,11 +33,12 @@ cc.Class({
         this.ShootTouchRightNode = cc.find("Canvas/ShootTouchRightNode");
         this.ShootTouchLeftNode.width = cc.winSize.width / 2;
         this.ShootTouchRightNode.width = cc.winSize.width / 2;
-        //监听时间
+        //监听事件
         this.node.on("event_game_jiesuan",this._on_game_jiesuan,this);
         this.node.on("map_load_finish",this._mapLoadFinish,this);
         this.node.on("game_all_targets_clear",this._allTargetClear,this);
-        this.node.on("game_set_hitrate",this._setHitRate,this)
+        this.node.on("game_set_hitrate",this._setHitRate,this);
+        this.node.on("game_kill_target",this._killTarget,this);
         //cc.director.getCollisionManager().enabledDebugDraw = true;
         //TEST模式
      },
@@ -120,7 +121,7 @@ cc.Class({
             nameNode.active = true;
             lbName.string = cc.vv.i18n.t("game_time")
             this.lbLimitTime = cc.find(path + "/lbLimitValue",this.UINode).getComponent(cc.Label);
-            this.limitTime = 20;
+            this.limitTime = this.gqCfgData.limitTime;
             this.lbLimitTime.string = this.limitTime;
             limitIdx++;
         }
@@ -173,7 +174,12 @@ cc.Class({
     //判断是否达到胜利条件
     _isWin : function(){
         if(this.gqCfgData.gTargetType == 1){
-
+            let id = this.taskParam[0];
+            let count = this.taskParam[1]
+            let beKilledCount = this.targetsMgr.getBeKillCountById(id);
+            if(beKilledCount >= count){
+                cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
+            }
         }
         else if(this.gqCfgData.gTargetType == 2){
 
@@ -193,21 +199,24 @@ cc.Class({
 
     _generateMonster : function(_monsterData,_radius){
         if(_monsterData.monsterType == Common.TargetType.ShortTerm){
-            this.mapMgr.generateTermTargetsNearShootPos(_radius,1,Common.TargetType.ShortTerm,_monsterData.timer);
+            this.mapMgr.generateTermTargetsNearShootPos(_monsterData.monsterId,_radius,1,Common.TargetType.ShortTerm,_monsterData.timer);
         }
         else if(_monsterData.monsterType == Common.TargetType.LongTerm){
-            this.mapMgr.generateTermTargetsNearShootPos(_radius,1,Common.TargetType.LongTerm);
+            this.mapMgr.generateTermTargetsNearShootPos(_monsterData.monsterId,_radius,1,Common.TargetType.LongTerm);
         }
         else if(_monsterData.monsterType == Common.TargetType.RandomMove){
-            this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.RandomMove,_radius,_monsterData.speed,150);
+            let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.RandomMove,_radius,_monsterData.speed,150);
+            tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.HideRandomMove){
             let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.HideRandomMove,_radius,_monsterData.speed,150);
             tarCtrl.setShowAndHideTime(_monsterData.showDelta,_monsterData.hideDelta);
+            tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.IntRandomMove){
             let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.IntRandomMove,_radius,_monsterData.speed,150);
             tarCtrl.setMoveAndStopTime(_monsterData.stopInterval,_monsterData.stopDelta);
+            tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.Move){
             let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.Move,_radius,_monsterData.speed,150);
@@ -220,6 +229,7 @@ cc.Class({
                 arr.push(cc.v2(x,y));
             }
             tarCtrl.setMoveArray(arr);
+            tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.HideMove){
             let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.HideMove,_radius,_monsterData.speed,150);
@@ -233,16 +243,20 @@ cc.Class({
             }
             tarCtrl.setMoveArray(arr);
             tarCtrl.setShowAndHideTime(_monsterData.showDelta,_monsterData.hideDelta);
+            tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.SplitMove){
-            this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.SplitMove,_radius,_monsterData.speed,150);
+            let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.SplitMove,_radius,_monsterData.speed,150);
+            tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.People){
-            this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.People,_radius,_monsterData.speed,150);
+            let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.People,_radius,_monsterData.speed,150);
+            tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.SpyMove){
             let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.SpyMove,_radius,_monsterData.speed,150);
             tarCtrl.setSpyAndManTime(_monsterData.manShowInterval,_monsterData.manShowDelta);
+            tarCtrl.setId(_monsterData.monsterId);
         }
     },
 
@@ -346,6 +360,14 @@ cc.Class({
         this.UINode.active = false;
         this.targetsMgr.removeAllTargets();
     },
+
+
+    //击杀一个目标后通知
+    _killTarget : function(){
+        this._isWin();
+    },
+
+
      //------------------------------------------------------------监听事件End------------------------------------
 
 
