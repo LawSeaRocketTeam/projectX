@@ -25,5 +25,11 @@ window.i18n.languages['en'] = {
     "sure" : "Sure",
     "cancel" : "Cancel",
     "game_task_indrodce_title" : "Task Target",
-    "game_task_info_content1" : "Kill {0} targets in {1} second"
+    "game_task_info_content1" : "Kill {0} targets in {1} second",
+    "js_success" : "Success",
+    "js_failed" : "Fail",
+    "js_kill" : "Kill:",
+    "js_rate" : "Hit Rate:",
+    "js_combo" : "Combo:",
+    "js_reaction" : "Reaction Time:",
 };

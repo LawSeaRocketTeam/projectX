@@ -12,8 +12,8 @@ window.i18n.languages['zh'] = {
     // write your key value pairs here
     "hit_rate" : "命中率:",
     "game_time" : "时间:",
-    "bullet_count" : "子弹剩余量:",
-    "miss_count" : "失误剩余次数:",
+    "bullet_count" : "子弹剩余:",
+    "miss_count" : "失误剩余:",
     "sensitivity" : "灵敏度",
     "left_hand" : "左手准星",
     "right_hand" : "右手准星",
@@ -26,4 +26,10 @@ window.i18n.languages['zh'] = {
     "cancel" : "取消",
     "game_task_info_title" : "关卡目标",
     "game_task_info_content1" : "{0}秒内击杀{1}个目标",
+    "js_success" : "成功",
+    "js_failed" : "失败",
+    "js_kill" : "击杀:",
+    "js_rate" : "命中率:",
+    "js_combo" : "连击:",
+    "js_reaction" : "反应时间:", 
 };

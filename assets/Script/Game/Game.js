@@ -28,16 +28,13 @@ cc.Class({
         this.lbHitRate = cc.find("Canvas/UINode/lb_hitValue").getComponent(cc.Label);
         //开启碰撞检测系统
         cc.director.getCollisionManager().enabled = true;
-
-        this.isGameInit = false
-
         //修改射击区域大小
         this.ShootTouchLeftNode = cc.find("Canvas/ShootTouchLeftNode");
         this.ShootTouchRightNode = cc.find("Canvas/ShootTouchRightNode");
         this.ShootTouchLeftNode.width = cc.winSize.width / 2;
         this.ShootTouchRightNode.width = cc.winSize.width / 2;
         //监听时间
-        this.node.on("event_gameover",this._on_gameOver,this);
+        this.node.on("event_game_jiesuan",this._on_game_jiesuan,this);
         this.node.on("map_load_finish",this._mapLoadFinish,this);
         this.node.on("game_all_targets_clear",this._allTargetClear,this);
         this.node.on("game_set_hitrate",this._setHitRate,this)
@@ -56,6 +53,8 @@ cc.Class({
             this.ShootTouchLeftNode.active = false;
             this.ShootTouchRightNode.active = true;
         }
+        this.isGameInit = false
+        this.spBg.position = cc.v2(0,0) 
     },
 
     update (dt) {
@@ -99,7 +98,7 @@ cc.Class({
             this.lbLimitTime.string = this.limitTime;
             if(this.limitTime == 0){
                 if(this.gqCfgData != 2){
-                    this._on_gameOver();
+                    cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:false});
                 }
             }
         }
@@ -121,7 +120,7 @@ cc.Class({
             nameNode.active = true;
             lbName.string = cc.vv.i18n.t("game_time")
             this.lbLimitTime = cc.find(path + "/lbLimitValue",this.UINode).getComponent(cc.Label);
-            this.limitTime = this.gqCfgData.limitTime;
+            this.limitTime = 20;
             this.lbLimitTime.string = this.limitTime;
             limitIdx++;
         }
@@ -340,8 +339,10 @@ cc.Class({
         this.lbHitRate.string = this.shootCtrl.getHitRate() + "%"
     },
 
-    _on_gameOver: function () {
-        this.jieSuanNode.active = true;
+    _on_game_jiesuan: function (event) {
+        let param = event;
+        let jieSuanUI = this.jieSuanNode.getComponent('JieSuan');
+        jieSuanUI.showJieSuan(param.isSucc);
         this.UINode.active = false;
         this.targetsMgr.removeAllTargets();
     },

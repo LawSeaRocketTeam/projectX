@@ -338,7 +338,7 @@ cc.Class({
                 //this.node.removeFromParent();
                 this.targetsMgr.addIdleTarget(this.node);
                 //出发游戏结束
-                cc.vv.gameNode.emit("event_gameover");
+                cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:false});
             }
         }
     },
@@ -376,7 +376,7 @@ cc.Class({
             {
                 //射中平民或者平民状态下的间谍怪，游戏结束
                 setTimeout(function() {
-                    cc.vv.gameNode.emit("event_gameover");
+                    cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:false});
                 }, 800);
             }
         }
