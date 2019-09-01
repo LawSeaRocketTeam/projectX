@@ -12,7 +12,7 @@ cc.Class({
         max_h:2000,     //可移动总高
         block_w:125,    //设置的大小要跟地图的宽整除
         block_h:125,    //设置的大小要跟地图的高整除
-        block_gen_count:4,  
+        block_gen_count:4,  //每个块最多生成
         shootNode:cc.Node,
     },
 
@@ -47,10 +47,24 @@ cc.Class({
      *         -bw-1  -bw   -bw+1
      */
     //如果该点九宫格内的格都满了，则取九宫内其中一点再取下去
-    _getNearEmptyBlockIdx : function(_idx){
-        let tmp = [-1,1,-this.blockWCount,this.blockWCount,0,-this.blockWCount+1,this.blockWCount-1,-this.blockWCount-1,this.blockWCount+1];
+    //_range 当range是1则是九宫格范围，当设定range>1就更多了
+    _getNearEmptyBlockIdx : function(_idx,_range){
+        //let tmp = [-1,1,-this.blockWCount,this.blockWCount,0,-this.blockWCount+1,this.blockWCount-1,-this.blockWCount-1,this.blockWCount+1];
+        _range = _range|| 1;
+        let tmp = [];
+        let row = 2*_range + 1; //一共有多少行，且行数=列数
+        let initNum = -this.blockWCount*_range - _range;
+        for(let i = 1; i <= row; i++){
+            let v = initNum + (i-1)*this.blockWCount;
+            for(let j = 1; j <= row; j++){
+                tmp.push(v + j);
+            }
+        }      
         //随机打乱数组，造成每次取的相邻顺序都不一样
-        tmp.sort(function(){return Common.seededRandom() > 0.5 ? -1:1;})
+        tmp.sort(function(){
+            let rand = Math.random();
+            //console.log("_getNearEmptyBlockIdx rand = " + rand);
+            return rand > 0.5 ? -1:1;})
         //console.log("----------------tmp array = " + tmp);
         for(let v of tmp){
             let nearIdx = _idx + v;
@@ -61,6 +75,7 @@ cc.Class({
                 return nearIdx;
             }
         }
+        //如果一个都找不到，找相邻节点的九宫格
         return this._getNearEmptyBlockIdx(_idx + tmp[0]);
     },
 
@@ -94,8 +109,17 @@ cc.Class({
         for(let i = 0; i < this.block_w; i++){
             position[i]=new Array();
             for(let j = 0; j < this.block_h; j++){
+                //isPlanted:是否需要新建 isSet：是否已经设置
                 position[i][j] = {radius:0,isPlanted:0,isSet:0};
             }
+        }
+        //往position中添加块里本来已经有的目标
+        for(let k in block.targets){
+            let node = block.targets[k];
+            let targetController = node.getComponent("TargetController");
+            let x = node.x - block.pos.x
+            let y = node.y - block.pos.y
+            position[x][y] = {radius:targetController.radius,isPlanted:0,isSet:1}
         }
         //最大半径
         let targetRadiusMax = _radius;
@@ -145,7 +169,7 @@ cc.Class({
                 
                 let target = this.targetsMgr.getIdleTarget();
                 let targetController = target.getComponent("TargetController");
-                targetController.setBlock(block);
+                targetController.setBlock(block);   //把对象往block里面添加
                 targetController.setId(_id);
                 this.scheduleOnce(function() {
                     //生成目标
@@ -175,7 +199,7 @@ cc.Class({
         //直到生成到目标数量为止，如果太多可能会导致卡死，因为九宫格都没位置了
         while(hasGen < _count)
         {
-            let nearBlockIdx = this._getNearEmptyBlockIdx(shootBlockIdx);
+            let nearBlockIdx = this._getNearEmptyBlockIdx(shootBlockIdx,2);
             if(nearBlockIdx != -1){ 
                 let genCount = _count - hasGen < this.block_gen_count ? _count - hasGen : this.block_gen_count
                 hasGen += this.generateTargetsInBlockByIdx(_id,nearBlockIdx,_radius,genCount,_type,_activeTime,_genDipTime);
