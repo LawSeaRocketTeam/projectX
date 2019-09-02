@@ -55,11 +55,12 @@ cc.Class({
             this.ShootTouchRightNode.active = true;
         }
         this.isGameInit = false
+        this.isJieSuaning = false
         this.spBg.position = cc.v2(0,0) 
     },
 
     update (dt) {
-        if(this.isGameInit){
+        if(this.isGameInit && !this.isJieSuaning){
             this._updateMonsters(dt);
         }
     },
@@ -94,12 +95,17 @@ cc.Class({
     },
 
     _updateTimer : function(){
+        if(this.isJieSuaning)
+            return
         if(this.limitTime != undefined && this.limitTime > 0){
             this.limitTime--;
             this.lbLimitTime.string = this.limitTime;
             if(this.limitTime == 0){
-                if(this.gqCfgData != 2){
+                if(this.gqCfgData.gTargetType != 2){
                     cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:false});
+                }
+                else{
+
                 }
             }
         }
@@ -182,7 +188,9 @@ cc.Class({
             }
         }
         else if(this.gqCfgData.gTargetType == 2){
-
+            if(this.limitTime <= 0){
+                cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
+            }
         }
         else if(this.gqCfgData.gTargetType == 3){
             
@@ -355,15 +363,19 @@ cc.Class({
 
     _on_game_jiesuan: function (event) {
         let param = event;
+        this.isJieSuaning = true
         let jieSuanUI = this.jieSuanNode.getComponent('JieSuan');
-        jieSuanUI.showJieSuan(param.isSucc);
+        jieSuanUI.showJieSuan(param.isSucc,this.guanQiaId);
         this.UINode.active = false;
         this.targetsMgr.removeAllTargets();
+        if(param.isSucc)
+            cc.vv.dataMgr.saveGuanQiaById(this.guanQiaId)
     },
 
 
     //击杀一个目标后通知
     _killTarget : function(){
+        this.shootCtrl.killTarget();
         this._isWin();
     },
 

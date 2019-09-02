@@ -95,6 +95,29 @@ cc.Class({
         return true;
     },
 
+    //根据关卡ID判断该关卡是否之前已经成功通过
+    checkGuanQiaIsPassBefore : function(_id){
+        let page = Math.floor(_id / 1000);
+        let guan = Math.floor((_id - page * 1000) / 10);
+        let star = Math.floor(((_id - page * 1000) - guan * 10));
+        let util = this.guanQiaData[page-1];
+        let item = util[guan-1];
+        if(item.star >= star)
+            return true;
+        else
+            return false;
+    },
+
+    //通过ID保存数据
+    saveGuanQiaById :function(_id){
+        let page = Math.floor(_id / 1000);
+        let guan = Math.floor((_id - page * 1000) / 10);
+        let star = Math.floor(((_id - page * 1000) - guan * 10));
+        let util = this.guanQiaData[page-1];
+        let item = util[guan-1];
+        item.star = star;
+    },
+
     //存储关卡数据到文件
     saveGuanQiaData : function(){
         let jsonData = JSON.stringify(this.guanQiaData);

@@ -35,13 +35,14 @@ cc.Class({
         g.lineTo(0, r);
         g.stroke();
         g.close();
-
-        this.shootCount = 0;    //射击次数
-        this.hitCount = 0;      //命中次数
     },
 
     start () {
-
+        this.shootCount = 0;    //射击次数
+        this.hitCount = 0;      //命中次数
+        this.comboCount = 0;    //连击次数
+        this.comboMaxCount = 0; //最大连击次数
+        this.killTargetCount = 0;   //杀敌数
     },
 
     //获取当前射击点在地图上的位置
@@ -58,9 +59,21 @@ cc.Class({
        //检测射击点是否在目标内
        this.shootCount++;
        if(this.targetsMgr.checkTargetsBeShoot(this.getShootPoint())){
-           this.hitCount++;
+            this.hitCount++;
+            this.comboCount++;
+            if(this.comboMaxCount < this.comboCount){
+                this.comboMaxCount = this.comboCount;
+            } 
+       }
+       else{
+           this.comboCount = 0
        }
        cc.vv.gameNode.emit("game_set_hitrate")
+    },
+
+    //
+    killTarget:function(){
+        this.killTargetCount++;
     },
 
     getHitRate : function(){
