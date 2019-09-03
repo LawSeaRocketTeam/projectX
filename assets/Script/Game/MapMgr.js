@@ -54,17 +54,20 @@ cc.Class({
         let tmp = [];
         let row = 2*_range + 1; //一共有多少行，且行数=列数
         let initNum = -this.blockWCount*_range - _range;
-        for(let i = 1; i <= row; i++){
-            let v = initNum + (i-1)*this.blockWCount;
-            for(let j = 1; j <= row; j++){
+        for(let i = 0; i < row; i++){
+            let v = initNum + i*this.blockWCount;
+            for(let j = 0; j < row; j++){
                 tmp.push(v + j);
             }
         }      
         //随机打乱数组，造成每次取的相邻顺序都不一样
-        tmp.sort(function(){
-            let rand = Math.random();
-            //console.log("_getNearEmptyBlockIdx rand = " + rand);
-            return rand > 0.5 ? -1:1;})
+        //打乱两次，让它乱一点
+        for(let i = 1; i < 3; i++){
+            tmp.sort(function(){
+                let rand = Math.random();
+                //console.log("_getNearEmptyBlockIdx rand = " + rand);
+                return rand > 0.5 ? -1:1;})
+        }
         //console.log("----------------tmp array = " + tmp);
         for(let v of tmp){
             let nearIdx = _idx + v;

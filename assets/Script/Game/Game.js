@@ -140,6 +140,7 @@ cc.Class({
             lbName.string = cc.vv.i18n.t("bullet_count")
             this.lbLimitBullet = cc.find(path + "/lbLimitValue",this.UINode).getComponent(cc.Label);
             this.limitBullet = this.gqCfgData.limitBullet;
+            this.lbLimitBullet.string = this.limitBullet
             limitIdx++;
         }
         //失误限制
@@ -162,14 +163,32 @@ cc.Class({
     _showTaskIntroduce : function(){
         this.introduceNode.active = true;
         this.UINode.active = false;
-        let lbContent = cc.find("lbIntroduce",this.introduceNode).getComponent(cc.Label)
-        let content = ""
+        let lbContent = cc.find("lbIntroduce",this.introduceNode).getComponent(cc.Label);
+        let nLimitTime = cc.find("lbLimitTime",this.introduceNode);
+        let nBullet = cc.find("lbBullet",this.introduceNode);
+        let content = "";
         if(this.gqCfgData.gTargetType == 1){
             content = cc.vv.i18n.t("game_task_info_content1")
-            content = Common.stringFormat(content,this.gqCfgData.limitTime,this.taskParam[1]);
+            content = Common.stringFormat(content,this.taskParam[1]);
+            lbContent.string = content;
+            content = cc.vv.i18n.t("limit_time")
+            if(this.gqCfgData.limitTime > 0 ){
+                content = Common.stringFormat(content,this.gqCfgData.limitTime + cc.vv.i18n.t("second"));
+            }
+            else{
+                content = Common.stringFormat(content,'不限');
+            }
+            nLimitTime.getComponent(cc.Label).string = content;
+            content = cc.vv.i18n.t("limit_bullet")
+            if(this.gqCfgData.limitBullet > 0 ){
+                content = Common.stringFormat(content,this.gqCfgData.limitBullet + cc.vv.i18n.t("count"));
+            }
+            else{
+                content = Common.stringFormat(content,'不限');
+            }
+            nBullet.getComponent(cc.Label).string = content;
         }
-        lbContent.string = content
-        let ac1 = cc.fadeOut(3);
+        let ac1 = cc.fadeOut(5);
         let ac2 = cc.callFunc(function(){
             this._initGame();
         }, this, "");
@@ -179,7 +198,7 @@ cc.Class({
 
     //判断是否达到胜利条件
     _isWin : function(){
-        if(this.gqCfgData.gTargetType == 1){
+        if(this.gqCfgData.gTargetType == 1){        //射击指定数量目标
             let id = this.taskParam[0];
             let count = this.taskParam[1]
             let beKilledCount = this.targetsMgr.getBeKillCountById(id);
@@ -187,15 +206,17 @@ cc.Class({
                 cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
             }
         }
-        else if(this.gqCfgData.gTargetType == 2){
+        else if(this.gqCfgData.gTargetType == 2){   //坚持X秒
             if(this.limitTime <= 0){
                 cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
             }
         }
-        else if(this.gqCfgData.gTargetType == 3){
-            
+        else if(this.gqCfgData.gTargetType == 3){   //  完美射击
+            if(this.shootCtrl.perfectShootCount >= this.taskParam[0] ){
+                cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
+            }
         }
-        else if(this.gqCfgData.gTargetType == 4){
+        else if(this.gqCfgData.gTargetType == 4){   // 守护要塞
             
         }
     },

@@ -91,15 +91,24 @@ cc.Class({
     //param1：射击坐标点
     //ret true击中目标 false打空
     checkTargetsBeShoot : function(_shootPoint){
-        var ret = false
+        let ret = false
+        let perfect = false
+        let reactionTime = 0;
         this.use_targets.forEach(function(item, index, arr) {
             let tc = item.getComponent("TargetController");
             if(tc.checkIsInPoint(_shootPoint)){
                 tc.beShoot();
                 ret = true;
+                let date = new Date();
+                let curTime = date.getTime();
+                reactionTime = curTime - tc.initTime;
+                //检测是否完美射击,就是在靶心10个像素范围内
+                if(tc.checkIsPerfect(_shootPoint)){
+                    perfect = true;
+                }
             }
         });
-        return ret
+        return {beShoot:ret,isPerfect:perfect,reactionTime:reactionTime};
     },
 
     //返回场上的目标个数

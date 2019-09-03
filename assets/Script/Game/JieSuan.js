@@ -50,6 +50,7 @@ cc.Class({
         this.lbKill.string = shootCtrl.killTargetCount;
         this.lbRate.string = shootCtrl.getHitRate() + "%";
         this.lbCombo.string = shootCtrl.comboMaxCount;
+        this.lbReaction.string = shootCtrl.getReactionTime() + "s"
     },
 
     onMenuClick:function(event, customEventData){   

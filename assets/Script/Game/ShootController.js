@@ -43,6 +43,8 @@ cc.Class({
         this.comboCount = 0;    //连击次数
         this.comboMaxCount = 0; //最大连击次数
         this.killTargetCount = 0;   //杀敌数
+        this.reactionTime = [];   //最长反应时间
+        this.perfectShootCount = 0; //完美设计次数
     },
 
     //获取当前射击点在地图上的位置
@@ -56,14 +58,19 @@ cc.Class({
 
     //射击
     shootTarget : function(){
-       //检测射击点是否在目标内
-       this.shootCount++;
-       if(this.targetsMgr.checkTargetsBeShoot(this.getShootPoint())){
+        //检测射击点是否在目标内
+        this.shootCount++;
+        let shootParam = this.targetsMgr.checkTargetsBeShoot(this.getShootPoint())
+        if(shootParam.beShoot){
             this.hitCount++;
             this.comboCount++;
+            this.reactionTime.push(shootParam.reactionTime)
             if(this.comboMaxCount < this.comboCount){
                 this.comboMaxCount = this.comboCount;
-            } 
+            }
+            if(shootParam.isPerfect){
+                this.perfectShootCount++;
+            }
        }
        else{
            this.comboCount = 0
@@ -74,10 +81,20 @@ cc.Class({
     //
     killTarget:function(){
         this.killTargetCount++;
+
     },
 
     getHitRate : function(){
         return Math.floor(this.hitCount / this.shootCount * 100);
+    },
+
+    getReactionTime : function(){
+        let sumTime = 0;
+        for(let v of this.reactionTime){
+            sumTime += v;
+        }
+        sumTime /= this.reactionTime.length;
+        return (sumTime / 1000).toFixed(2);
     }
 
     // update (dt) {},

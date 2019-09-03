@@ -55,6 +55,7 @@ cc.Class({
     //Param5:移动方向角度
     refresh: function(_tarType,_position,_radius,_activeTime,_speed,_direction)
     {
+        let date = new Date();
         //参数默认值
         _radius = _radius || 50;
         _activeTime = _activeTime|| -1; 
@@ -66,6 +67,7 @@ cc.Class({
         this.node.active = true;
         this.node.opacity = 255;
         this.activeTime = _activeTime;
+        this.initTime = date.getTime()    //生成时间
         this.speed = _speed;   //每秒移动速度，游戏限制30帧
         this.dirDegress = _direction;
         this.dirVec = Common.degreesToVectors(_direction);
@@ -354,6 +356,18 @@ cc.Class({
         let circleCollider = this.getComponent(cc.CircleCollider);
         //两个圆是否相交，射击点用1个像素的圆
         let colliderRadius = circleCollider.radius * this.node.scale;
+        let colliderPoint = cc.v2(this.node.position.x,this.node.position.y + circleCollider.offset.y * this.node.scale);
+        if(cc.Intersection.circleCircle({position:_shootPoint,radius:1},{position:colliderPoint,radius:colliderRadius})){
+            return true;
+        }
+        return false;
+    },
+
+    //检测是否完美射击，靶心10个像素范围内
+    checkIsPerfect : function(_shootPoint){
+        let circleCollider = this.getComponent(cc.CircleCollider);
+        //两个圆是否相交，射击点用1个像素的圆
+        let colliderRadius = 10;
         let colliderPoint = cc.v2(this.node.position.x,this.node.position.y + circleCollider.offset.y * this.node.scale);
         if(cc.Intersection.circleCircle({position:_shootPoint,radius:1},{position:colliderPoint,radius:colliderRadius})){
             return true;

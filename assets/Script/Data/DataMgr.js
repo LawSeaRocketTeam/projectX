@@ -65,6 +65,20 @@ cc.Class({
             }
             self.configSupplyData = data.json;
         });
+        cc.loader.loadRes('config/uMonsterId', function (err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            self.configUmonsters = data.json;
+        });
+        cc.loader.loadRes('config/movepos', function (err, data) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            self.configMovePosUtil = data.json;
+        });
     },
 
     //存储操作模式
@@ -152,10 +166,20 @@ cc.Class({
     //根据怪物的集合ID获取怪物集合
     getMonsterCfgDataByUid : function(_uid){
         let monsters = [];
-        for(let k in this.configMonsterData.children){
-            let v = this.configMonsterData.children[k];
+        for(let k in this.configUmonsters.children){
+            let v = this.configUmonsters.children[k];
             if(v.uMonsterId == _uid){
-                monsters.push(v);
+                //monsters.push(v);
+                let monstersId = v.monsterId.split(',');
+                for(let id of monstersId){
+                    for(let i in this.configMonsterData.children){
+                        let md = this.configMonsterData.children[i];
+                        if(md.monsterId == id){
+                            monsters.push(md);
+                        }
+                    }
+                }
+                break;
             }
         }
         return monsters;
