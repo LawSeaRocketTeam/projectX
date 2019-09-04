@@ -386,9 +386,9 @@ cc.Class({
         }
         else{
             //播放受击动画，消失
+            this.targetsMgr.addBeKillId(this.id);   //这个不要放在动画结束后调用，因为外部需要及时知道当前是否已经被击杀
             var finished = cc.callFunc(function () {
                 this.targetsMgr.addIdleTarget(this.node);
-                this.targetsMgr.addBeKillId(this.id);
                 cc.vv.gameNode.emit("game_kill_target");
             }, this, "");
             var myAction = cc.sequence(cc.blink(0.3,2),cc.fadeOut(0.5), finished);

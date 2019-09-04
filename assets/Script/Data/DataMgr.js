@@ -209,4 +209,15 @@ cc.Class({
         return supply;
     },
 
+    //根据ID获取位置数据
+    getMovPosCfgDataById : function(_id){
+        for(let k in this.configMovePosUtil.children){
+            let v = this.configMovePosUtil.children[k]
+            if(v.movePosID == _id){
+                return v;
+            }
+        }
+        return undefined;
+    }
+
 });

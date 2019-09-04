@@ -45,6 +45,7 @@ cc.Class({
         this.killTargetCount = 0;   //杀敌数
         this.reactionTime = [];   //最长反应时间
         this.perfectShootCount = 0; //完美设计次数
+        this.canShoot = true;  //是否能够进行射击
     },
 
     //获取当前射击点在地图上的位置
@@ -58,6 +59,8 @@ cc.Class({
 
     //射击
     shootTarget : function(){
+        if(!this.canShoot)
+            return
         //检测射击点是否在目标内
         this.shootCount++;
         let shootParam = this.targetsMgr.checkTargetsBeShoot(this.getShootPoint())
@@ -76,6 +79,10 @@ cc.Class({
            this.comboCount = 0
        }
        cc.vv.gameNode.emit("game_set_hitrate")
+    },
+
+    setCanShoot : function(_value){
+        this.canShoot = _value
     },
 
     //

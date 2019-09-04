@@ -54,9 +54,9 @@ cc.Class({
             this.ShootTouchLeftNode.active = false;
             this.ShootTouchRightNode.active = true;
         }
-        this.isGameInit = false
-        this.isJieSuaning = false
-        this.spBg.position = cc.v2(0,0) 
+        this.isGameInit = false;
+        this.isJieSuaning = false;
+        this.spBg.position = cc.v2(0,0);
     },
 
     update (dt) {
@@ -157,6 +157,7 @@ cc.Class({
         //开启一个一秒执行一次的定时器，用作倒计时
         this.schedule(this._updateTimer,1);
         this.isGameInit = true;
+        this.shootCtrl.setCanShoot(true);
     },
 
     //显示关卡任务介绍
@@ -197,33 +198,61 @@ cc.Class({
     },
 
     //判断是否达到胜利条件
-    _isWin : function(){
+    //p1:是否发送结算
+    _isWin : function(_isEmit){
+        if(_isEmit == undefined)
+            _isEmit = true;
+        let ret = false;
         if(this.gqCfgData.gTargetType == 1){        //射击指定数量目标
             let id = this.taskParam[0];
             let count = this.taskParam[1]
             let beKilledCount = this.targetsMgr.getBeKillCountById(id);
             if(beKilledCount >= count){
-                cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
+                ret = true;
             }
         }
         else if(this.gqCfgData.gTargetType == 2){   //坚持X秒
             if(this.limitTime <= 0){
-                cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
+                ret = true;
             }
         }
         else if(this.gqCfgData.gTargetType == 3){   //  完美射击
             if(this.shootCtrl.perfectShootCount >= this.taskParam[0] ){
-                cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
+                ret = true;
             }
         }
         else if(this.gqCfgData.gTargetType == 4){   // 守护要塞
             
         }
+        if(ret && _isEmit)
+            cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
+        return ret
     },
 
     //判断是否触发失败条件
     _isLose : function(){
 
+    },
+
+    //根据配置设置目标移动信息
+    _setTargetMovePosData : function(_tarCtrl,_monsterData){
+        let movePosData = cc.vv.dataMgr.getMovPosCfgDataById(_monsterData.movePosID);
+        let startPos = movePosData.movegenPos.split(',');
+        let startPosV2 = cc.v2(startPos[0],startPos[1]);
+        _tarCtrl.node.position = startPosV2;
+        arr.push(_tarCtrl.node.position);
+        let movemidPos = movePosData.movegenPos.split(';');
+        for(let i in movemidPos){
+            let v = movemidPos[i];
+            let pos = v.split(',');
+            let posV2 = cc.v2(pos[0],pos[1]);
+            arr.push(posV2);
+        }
+        let endPos = movePosData.movEndPos.split(',');
+        let endPosV2 = cc.v2(endPos[0],endPos[1]);
+        arr.push(endPosV2);
+        let arr = [];
+        _tarCtrl.setMoveArray(arr);
     },
 
     _generateMonster : function(_monsterData,_radius){
@@ -249,28 +278,12 @@ cc.Class({
         }
         else if(_monsterData.monsterType == Common.TargetType.Move){
             let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.Move,_radius,_monsterData.speed,150);
-            let arr = [];
-            arr.push(tarCtrl.node.position);
-            //随机生成三个点
-            for(let i = 0; i < 3; i++){
-                let x = Common.randomFrom(-1500,1500,true);
-                let y = Common.randomFrom(-800,800,true);
-                arr.push(cc.v2(x,y));
-            }
-            tarCtrl.setMoveArray(arr);
+            this._setTargetMovePosData(tarCtrl,_monsterData)
             tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.HideMove){
             let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.HideMove,_radius,_monsterData.speed,150);
-            let arr = [];
-            arr.push(tarCtrl.node.position);
-            //随机生成三个点
-            for(let i = 0; i < 3; i++){
-                let x = Common.randomFrom(-1500,1500,true);
-                let y = Common.randomFrom(-800,800,true);
-                arr.push(cc.v2(x,y));
-            }
-            tarCtrl.setMoveArray(arr);
+            this._setTargetMovePosData(tarCtrl,_monsterData)
             tarCtrl.setShowAndHideTime(_monsterData.showDelta,_monsterData.hideDelta);
             tarCtrl.setId(_monsterData.monsterId);
         }
@@ -377,9 +390,22 @@ cc.Class({
         }
     },
 
-    //设置命中率
+    //设置命中率,子弹数量
     _setHitRate : function(){
         this.lbHitRate.string = this.shootCtrl.getHitRate() + "%"
+        //是否限制子弹,是则修改子弹数量
+        if(this.gqCfgData.limitBullet > 0){
+            let leftBullet = this.limitBullet - this.shootCtrl.shootCount;
+            leftBullet = leftBullet < 0 ? 0 : leftBullet;
+            this.lbLimitBullet.string = leftBullet;
+            if(leftBullet <= 0){
+                this.shootCtrl.setCanShoot(false);
+                if(leftBullet <= 0 && !this._isWin(false)){
+                    //是否限制子弹，是否在成功前就已经没有子弹了
+                    cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:false});
+                }
+            }
+        }
     },
 
     _on_game_jiesuan: function (event) {
