@@ -21,8 +21,7 @@ cc.Class({
     },
 
     refresh : function(){
-        this.cached_targets.clear();
-        this.use_targets.length = 0;
+        this.removeAllTargets();
         this.beKilled_targetsId.length = 0;
     },
 
@@ -63,13 +62,15 @@ cc.Class({
         let targetCtrl = _target.getComponent("TargetController");
         targetCtrl.removeFromBlock();
         this._removeTargetInUse(_target);
+        //移除节点上所有动作，否则下一个使用节点会继承了动作
+        _target.stopAllActions();
         //添加进对象池会自动从父对象remove
         this.cached_targets.put(_target);
     },
 
     removeAllTargets : function(){
-        for(let i = 0; i < this.use_targets.length; i++){
-            this.cached_targets.put(this.use_targets[i]);
+        while(this.use_targets.length > 0){
+            this.addIdleTarget(this.use_targets[0]);
         }
         this.use_targets = [];
         this.cached_targets.clear();

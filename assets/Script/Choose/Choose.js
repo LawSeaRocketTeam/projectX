@@ -13,9 +13,13 @@ cc.Class({
         this.rpMgr = this.pageView.getComponent("ChoosePageViewMgr")
     },
 
-    start () {
+    onEnable(){
         this.refreshPageView();
         this.pageView.scrollToTop();
+    },
+
+    start () {
+       
     },
 
     //刷新页面

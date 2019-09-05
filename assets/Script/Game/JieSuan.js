@@ -53,11 +53,16 @@ cc.Class({
         this.lbReaction.string = shootCtrl.getReactionTime() + "s"
     },
 
-    onMenuClick:function(event, customEventData){   
+    onMenuClick:function(event, customEventData){ 
+        this.node.active = false;  
         cc.director.loadScene("loginScene");
     },
 
     onNextClick:function(event, customEventData){
+        this.node.active = false;
+        //获取下一关Id，并全局设置
+        cc.vv.sceneParam.id = cc.vv.dataMgr.getNextGuanQiaIdById(cc.vv.sceneParam.id)
+        cc.vv.gameNode.emit("game_refresh");
     },
 
     // update (dt) {},

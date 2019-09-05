@@ -14,6 +14,7 @@ cc.Class({
         block_h:125,    //设置的大小要跟地图的高整除
         block_gen_count:4,  //每个块最多生成
         shootNode:cc.Node,
+        spbg : cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -25,8 +26,8 @@ cc.Class({
         this.blockHCount = Math.floor(this.max_h / this.block_h);
         this.blockWCount = Math.floor(this.max_w / this.block_w);
         //扩大地图大小，避免在高分别率机器看到边界
-        //this.node.width = this.max_w * 1.5;
-        //this.node.height = this.max_h * 1.5;
+        //this.spbg.width = this.max_w * 1.5;
+        //this.spbg.height = this.max_h * 1.5;
         for(let i = 0;i < this.blockHCount; i++){
             for(let j = 0; j < this.blockWCount; j++){
                 let block = new Object();
@@ -37,6 +38,7 @@ cc.Class({
         }
         //cc.director.getCollisionManager().enabled = true;
         //console.log("map block = \n" +JSON.stringify(this.arrBlocks));
+        //要保证game脚本比map脚本先load完，否则gameNode是空的
         cc.vv.gameNode.emit("map_load_finish");
     },
     
@@ -180,7 +182,7 @@ cc.Class({
                     let y = block.pos.y + targetY;
                     //let tc = target.getComponent("TargetController");
                     targetController.refresh(_type,cc.v2(x,y),_radius,_activeTime);
-                    target.parent = this.node
+                    target.parent = this.spbg
                 }.bind(this), delayTime);
             }
             //当到达数量后，则可退出循环
@@ -223,7 +225,7 @@ cc.Class({
         var target = this.targetsMgr.getIdleTarget();
         var targetController = target.getComponent("TargetController");
         targetController.refresh(_type,pos,_radius,-1,_speed,_dirDeg);
-        target.parent = this.node
+        target.parent = this.spbg
         return targetController;
     },
 

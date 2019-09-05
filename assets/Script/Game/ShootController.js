@@ -38,6 +38,10 @@ cc.Class({
     },
 
     start () {
+        this.refresh();
+    },
+
+    refresh : function(){
         this.shootCount = 0;    //射击次数
         this.hitCount = 0;      //命中次数
         this.comboCount = 0;    //连击次数
@@ -92,11 +96,19 @@ cc.Class({
     },
 
     getHitRate : function(){
-        return Math.floor(this.hitCount / this.shootCount * 100);
+        if(this.shootCount != 0){
+            return Math.floor(this.hitCount / this.shootCount * 100);
+        }
+        else{
+            return 0;
+        }
     },
 
     getReactionTime : function(){
         let sumTime = 0;
+        if(this.reactionTime.length == 0){
+            return 0;
+        }
         for(let v of this.reactionTime){
             sumTime += v;
         }

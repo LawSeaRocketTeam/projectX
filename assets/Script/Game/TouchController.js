@@ -29,7 +29,7 @@ cc.Class({
         var canvas  = cc.find("Canvas");
         // var winSize = canvas.getComponent(cc.Canvas).winSize;
         var winSize = cc.winSize;
-        var mapMgr = self.spBg.getComponent("MapMgr");
+        var mapMgr = canvas.getComponent("MapMgr");
         var spBgSize = cc.size(mapMgr.max_w,mapMgr.max_h);
         this.moveSensi = 0.4 * cc.vv.dataMgr.opSetting.sensi;
         self.moveTouchNode.on(cc.Node.EventType.TOUCH_START,function(event){

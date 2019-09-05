@@ -41,7 +41,7 @@ cc.Class({
     onLoad () {
         var canvas = cc.find("Canvas")
         this.targetsMgr = canvas.getComponent("TargetsMgr");
-        this.mapMgr = canvas.getChildByName("spBg").getComponent("MapMgr");
+        this.mapMgr = canvas.getComponent("MapMgr");
     },
 
     // start () {
@@ -251,7 +251,8 @@ cc.Class({
         //轨迹移动目标处理
         if(this.tarType == Common.TargetType.Move || this.tarType == Common.TargetType.HideMove){
             //不能用相等，应为会有可能产生小数，这能用距离容差
-            if(this.node.position.sub(this.moveArr[this.moveArrIdx]).mag() <= 2){
+            let dipDis = this.node.position.sub(this.moveArr[this.moveArrIdx]).mag();
+            if(dipDis <= 2){
                 this.moveArrIdx++;
                 this.moveArrIdx = this.moveArrIdx < this.moveArr.length ? this.moveArrIdx : 0
                 let dst = this.moveArr[this.moveArrIdx]
@@ -389,7 +390,7 @@ cc.Class({
             this.targetsMgr.addBeKillId(this.id);   //这个不要放在动画结束后调用，因为外部需要及时知道当前是否已经被击杀
             var finished = cc.callFunc(function () {
                 this.targetsMgr.addIdleTarget(this.node);
-                cc.vv.gameNode.emit("game_kill_target");
+                cc.vv.gameNode.emit("game_kill_target",{monsterId:this.id});
             }, this, "");
             var myAction = cc.sequence(cc.blink(0.3,2),cc.fadeOut(0.5), finished);
             this.node.runAction(myAction);

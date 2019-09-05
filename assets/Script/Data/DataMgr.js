@@ -132,6 +132,17 @@ cc.Class({
         item.star = star;
     },
 
+
+    //命令手段添加
+    cmdGuanQiaSave : function(_id){
+        let page = Math.floor(_id / 1000);
+        let guan = Math.floor((_id - page * 1000) / 10);
+        let star = Math.floor(((_id - page * 1000) - guan * 10));
+        let util = this.guanQiaData[page-1];
+        let item = util[guan-1];
+        item.star = star-1;
+    },
+
     //存储关卡数据到文件
     saveGuanQiaData : function(){
         let jsonData = JSON.stringify(this.guanQiaData);
@@ -163,6 +174,21 @@ cc.Class({
         return undefined;
     },
 
+    //根据当前关卡ID获取下一关关卡ID
+    getNextGuanQiaIdById : function(_curGid){
+        for(let k in this.configGuanQiaData){
+            let k = parseInt(k);
+            let v = this.configGuanQiaData[k];
+            if(v.gId == _curGid){
+                if(k + 1 < this.configGuanQiaData.length){
+                    let nextV = this.configGuanQiaData[k + 1]
+                    return nextV.gId;
+                }
+            }
+        }
+        return -1;
+    },
+
     //根据怪物的集合ID获取怪物集合
     getMonsterCfgDataByUid : function(_uid){
         let monsters = [];
@@ -170,7 +196,7 @@ cc.Class({
             let v = this.configUmonsters.children[k];
             if(v.uMonsterId == _uid){
                 //monsters.push(v);
-                let monstersId = v.monsterId.split(',');
+                let monstersId = String(v.monsterId).split(',');
                 for(let id of monstersId){
                     for(let i in this.configMonsterData.children){
                         let md = this.configMonsterData.children[i];

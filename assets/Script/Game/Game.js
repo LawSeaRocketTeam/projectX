@@ -19,7 +19,7 @@ cc.Class({
         //cc.game.setFrameRate(45);
         this.targetsMgr = this.getComponent("TargetsMgr");
         this.shootCtrl = this.shootNode.getComponent("ShootController");
-        this.mapMgr = this.spBg.getComponent("MapMgr");
+        this.mapMgr = this.getComponent("MapMgr");
         this.jieSuanNode = cc.find("Canvas/NodeJieSuan");
         this.UINode = cc.find("Canvas/UINode");
         this.btNode = cc.find("Canvas/Node_button");
@@ -39,9 +39,10 @@ cc.Class({
         this.node.on("game_all_targets_clear",this._allTargetClear,this);
         this.node.on("game_set_hitrate",this._setHitRate,this);
         this.node.on("game_kill_target",this._killTarget,this);
+        this.node.on("game_refresh",this._gameRefresh,this);
         //cc.director.getCollisionManager().enabledDebugDraw = true;
         //TEST模式
-     },
+    },
 
     start () {
         if(cc.vv.dataMgr.opSetting.op == 0){
@@ -57,6 +58,7 @@ cc.Class({
         this.isGameInit = false;
         this.isJieSuaning = false;
         this.spBg.position = cc.v2(0,0);
+        this.gameLeiJiTime = 0;
     },
 
     update (dt) {
@@ -67,19 +69,19 @@ cc.Class({
 
     //根据怪物的配置数据，对怪物的定期刷新
     _updateMonsters : function(_dt){
+        this.gameLeiJiTime += _dt;
         for(let k in this.uMonsterCfgData){
             let monsterData = this.uMonsterCfgData[k];
+            if(monsterData.initGenTime > this.gameLeiJiTime * 1000){
+                continue;
+            }
             if(monsterData.updateDelta == undefined){
                 //新增一个累计时间记录
                 monsterData.updateDelta = 0;
-                //如果初始生成时间为0，则生成一个怪
-                if(monsterData.initGenTime == 0){
-                    //生成怪
-                    this._generateMonster(monsterData,50);
-                }
+                this._generateMonster(monsterData,50);
             }
             monsterData.updateDelta += _dt;
-            if(monsterData.updateDelta > monsterData.refreshInteval){
+            if(monsterData.updateDelta > monsterData.refreshInteval && monsterData.refreshInteval != -1){
                 //判断是否能同时存在
                 if(monsterData.isCoexist){
                     //生成怪
@@ -109,6 +111,17 @@ cc.Class({
                 }
             }
         }
+    },
+
+    //刷新游戏
+    refreshGame : function(){
+        this.isGameInit = false;
+        this.isJieSuaning = false;
+        this.spBg.position = cc.v2(0,0);
+        this.gameLeiJiTime = 0;
+        this.targetsMgr.refresh();
+        this.shootCtrl.refresh();
+        this._mapLoadFinish();
     },
 
     //初始化游戏
@@ -163,6 +176,7 @@ cc.Class({
     //显示关卡任务介绍
     _showTaskIntroduce : function(){
         this.introduceNode.active = true;
+        this.introduceNode.opacity = 255;
         this.UINode.active = false;
         let lbContent = cc.find("lbIntroduce",this.introduceNode).getComponent(cc.Label);
         let nLimitTime = cc.find("lbLimitTime",this.introduceNode);
@@ -236,22 +250,26 @@ cc.Class({
 
     //根据配置设置目标移动信息
     _setTargetMovePosData : function(_tarCtrl,_monsterData){
+        let arr = [];
         let movePosData = cc.vv.dataMgr.getMovPosCfgDataById(_monsterData.movePosID);
         let startPos = movePosData.movegenPos.split(',');
-        let startPosV2 = cc.v2(startPos[0],startPos[1]);
+        let startPosV2 = cc.v2(parseInt(startPos[0]),parseInt(startPos[1]));
         _tarCtrl.node.position = startPosV2;
         arr.push(_tarCtrl.node.position);
-        let movemidPos = movePosData.movegenPos.split(';');
-        for(let i in movemidPos){
-            let v = movemidPos[i];
-            let pos = v.split(',');
-            let posV2 = cc.v2(pos[0],pos[1]);
-            arr.push(posV2);
+        let movemidPos = movePosData.movemidPos;
+        if(movemidPos != -1){
+            let movemidPos = movemidPos.split(';');
+            for(let i in movemidPos){
+                let v = movemidPos[i];
+                let pos = String(v).split(',');
+                let posV2 = cc.v2(parseInt(pos[0]),parseInt(pos[1]));
+                arr.push(posV2);
+            }
         }
+        
         let endPos = movePosData.movEndPos.split(',');
-        let endPosV2 = cc.v2(endPos[0],endPos[1]);
+        let endPosV2 = cc.v2(parseInt(endPos[0]),parseInt(endPos[1]));
         arr.push(endPosV2);
-        let arr = [];
         _tarCtrl.setMoveArray(arr);
     },
 
@@ -421,9 +439,24 @@ cc.Class({
 
 
     //击杀一个目标后通知
-    _killTarget : function(){
+    _killTarget : function(event){
+        let param = event;
         this.shootCtrl.killTarget();
-        this._isWin();
+        if(!this._isWin()){
+            for(let k in this.uMonsterCfgData){
+                let v = this.uMonsterCfgData[k];
+                if(v.monsterId == event.monsterId){
+                    if(v.isRefreshDied){
+                        v.updateDelta = undefined;//设置为undefiend后，updateMonster中就会调用生成，相当于立即刷新
+                    }
+                }
+            }
+        }
+    },
+
+    //刷新游戏
+    _gameRefresh : function(event){
+        this.refreshGame();
     },
 
 
@@ -447,60 +480,4 @@ cc.Class({
     },
     
     //--------------------------------------------------点击事件回调End----------------------------------------------
-
-
-    // onGenerateClick:function(event, customEventData){
-    //     if(customEventData == Common.TargetType.ShortTerm){
-    //         this.mapMgr.generateTermTargetsNearShootPos(50,4,Common.TargetType.ShortTerm,10,0.2);
-    //     }
-    //     else if(customEventData == Common.TargetType.LongTerm){
-    //         this.mapMgr.generateTermTargetsNearShootPos(50,4,Common.TargetType.LongTerm,-1,0.2);
-    //     }
-    //     else if(customEventData == Common.TargetType.RandomMove){
-    //         this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.RandomMove,50,300,100);
-    //     }
-    //     else if(customEventData == Common.TargetType.HideRandomMove){
-    //         let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.HideRandomMove,50,300,100);
-    //         tarCtrl.setShowAndHideTime(5,3);
-    //     }
-    //     else if(customEventData == Common.TargetType.IntRandomMove){
-    //         let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.IntRandomMove,50,300,100);
-    //         tarCtrl.setMoveAndStopTime(5,1.5);
-    //     }
-    //     else if(customEventData == Common.TargetType.Move){
-    //         let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.Move,50,300,100);
-    //         let arr = [];
-    //         arr.push(tarCtrl.node.position);
-    //         //随机生成三个点
-    //         for(let i = 0; i < 3; i++){
-    //             let x = Common.randomFrom(-1500,1500,true);
-    //             let y = Common.randomFrom(-800,800,true);
-    //             arr.push(cc.v2(x,y));
-    //         }
-    //         tarCtrl.setMoveArray(arr);
-    //     }
-    //     else if(customEventData == Common.TargetType.HideMove){
-    //         let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.HideMove,50,300,100);
-    //         let arr = [];
-    //         arr.push(tarCtrl.node.position);
-    //         //随机生成三个点
-    //         for(let i = 0; i < 3; i++){
-    //             let x = Common.randomFrom(-1500,1500,true);
-    //             let y = Common.randomFrom(-800,800,true);
-    //             arr.push(cc.v2(x,y));
-    //         }
-    //         tarCtrl.setMoveArray(arr);
-    //         tarCtrl.setShowAndHideTime(5,3);
-    //     }
-    //     else if(customEventData == Common.TargetType.SplitMove){
-    //         this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.SplitMove,50,150,100);
-    //     }
-    //     else if(customEventData == Common.TargetType.People){
-    //         this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.People,50,300,100);
-    //     }
-    //     else if(customEventData == Common.TargetType.SpyMove){
-    //         let tarCtrl = this.mapMgr.generateMoveTargetNearShootPos(Common.TargetType.SpyMove,50,300,100);
-    //         tarCtrl.setSpyAndManTime(3,3);
-    //     }
-    // },
 });

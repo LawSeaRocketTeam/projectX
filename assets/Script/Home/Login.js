@@ -13,6 +13,7 @@ cc.Class({
     properties: {
         icon:cc.Node,
         operateSettingLayer : cc.Node,
+        testSettingLayer : cc.Node,
         chooseLayer : cc.Node,
     },
 
@@ -27,7 +28,7 @@ cc.Class({
      },
 
     start () {
-        if(cc.vv.sceneParam.showLayer == "opSetting")
+        if(cc.vv.sceneParam.showLayer != undefined && cc.vv.sceneParam.showLayer == "opSetting")
         {
             this.operateSettingLayer.active = true;
         }
@@ -35,6 +36,7 @@ cc.Class({
             this.operateSettingLayer.active = false;
         }
         this.chooseLayer.active = false;    
+        this.testSettingLayer.active = false;
         let action1 = cc.moveTo(5,cc.v2(230,287));
         let action2 = cc.moveTo(5,cc.v2(-230,287));
         let action3 = cc.sequence(action1,action2);
@@ -52,7 +54,11 @@ cc.Class({
 
     onOperaSettingClick:function(event, customEventData){
         this.operateSettingLayer.active = true;
-    }
+    },
+
+    onTestSettingClick : function(event, customEventData){
+        this.testSettingLayer.active = true;
+    },
 
     // update (dt) {},
 });
