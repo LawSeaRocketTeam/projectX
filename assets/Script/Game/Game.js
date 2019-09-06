@@ -119,6 +119,9 @@ cc.Class({
         this.isJieSuaning = false;
         this.spBg.position = cc.v2(0,0);
         this.gameLeiJiTime = 0;
+        this.limitTime = -1;
+        this.limitBullet = -1;
+        this.lbLimitMiss = -1;
         this.targetsMgr.refresh();
         this.shootCtrl.refresh();
         this._mapLoadFinish();

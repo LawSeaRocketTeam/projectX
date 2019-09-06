@@ -38,6 +38,9 @@ cc.Class({
         }
         //cc.director.getCollisionManager().enabled = true;
         //console.log("map block = \n" +JSON.stringify(this.arrBlocks));
+    },
+
+    start(){
         //要保证game脚本比map脚本先load完，否则gameNode是空的
         cc.vv.gameNode.emit("map_load_finish");
     },
@@ -201,10 +204,11 @@ cc.Class({
         let pos = shootCtrl.getShootPoint();
         let shootBlockIdx = this.getPointInBlockIdx(pos); 
         let hasGen = 0
-        //直到生成到目标数量为止，如果太多可能会导致卡死，因为九宫格都没位置了
         while(hasGen < _count)
         {
-            let nearBlockIdx = this._getNearEmptyBlockIdx(shootBlockIdx,2);
+            //1-3随机范围可以是九宫格，可以使25宫格
+            let range = Common.randomFrom(1,3);
+            let nearBlockIdx = this._getNearEmptyBlockIdx(shootBlockIdx,range);
             if(nearBlockIdx != -1){ 
                 let genCount = _count - hasGen < this.block_gen_count ? _count - hasGen : this.block_gen_count
                 hasGen += this.generateTargetsInBlockByIdx(_id,nearBlockIdx,_radius,genCount,_type,_activeTime,_genDipTime);
@@ -243,10 +247,6 @@ cc.Class({
         let yDip = Common.seededRandom(-_genRange,_genRange,true);
         pos = cc.v2(pos.x + xDip,pos.y + yDip);
         return this.generateTarget(_type,_radius,_speed,pos,_dirDeg);
-    },
-
-    start () {
-
     },
 
     // update (dt) {},

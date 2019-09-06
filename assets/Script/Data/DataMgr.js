@@ -1,6 +1,6 @@
 //游戏里面所有数据存储管理的的地方
 
-var encrypt = require("encryptjs");
+//var encrypt = require("encryptjs");
 var secretkey = "project_x_20190809"
 var OP_SETTING_NAME = "OP_SETTING_NAME"
 var GUANQIA_DATA_NAME = "GUANQIA_DATA"
@@ -14,7 +14,8 @@ cc.Class({
         this.gameSetting = {};  //游戏设置
         let opSettingData = cc.sys.localStorage.getItem(OP_SETTING_NAME);
         if(opSettingData != undefined){
-            opSettingData = JSON.parse(encrypt.decrypt(opSettingData,secretkey,256));
+           // opSettingData = JSON.parse(encrypt.decrypt(opSettingData,secretkey,256));
+            opSettingData = JSON.parse(opSettingData);
             this.opSetting.op = opSettingData.op;
             this.opSetting.sensi = opSettingData.sensi;
         }
@@ -29,7 +30,8 @@ cc.Class({
             //游戏用户关卡数据
             let gqData = cc.sys.localStorage.getItem(GUANQIA_DATA_NAME);
             if(gqData != undefined){
-                self.guanQiaData = JSON.parse(encrypt.decrypt(gqData,secretkey,256));
+                //self.guanQiaData = JSON.parse(encrypt.decrypt(gqData,secretkey,256));
+                self.guanQiaData = JSON.parse(gqData);
             }
             else{
                 //如果是空,则添加关卡的第一个集合
@@ -86,8 +88,9 @@ cc.Class({
         this.opSetting.op = _op;
         this.opSetting.sensi = _sensi;
         let jsonData = JSON.stringify(this.opSetting);
-        let encryData = encrypt.encrypt(jsonData,secretkey,256);
-        cc.sys.localStorage.setItem(OP_SETTING_NAME,encryData);
+        //let encryData = encrypt.encrypt(jsonData,secretkey,256);
+        //cc.sys.localStorage.setItem(OP_SETTING_NAME,encryData);
+        cc.sys.localStorage.setItem(OP_SETTING_NAME,jsonData);
     },
 
     //添加关卡集合初始数据
@@ -146,8 +149,9 @@ cc.Class({
     //存储关卡数据到文件
     saveGuanQiaData : function(){
         let jsonData = JSON.stringify(this.guanQiaData);
-        let encryData = encrypt.encrypt(jsonData,secretkey,256);
-        cc.sys.localStorage.setItem(GUANQIA_DATA_NAME,encryData);
+        // let encryData = encrypt.encrypt(jsonData,secretkey,256);
+        // cc.sys.localStorage.setItem(GUANQIA_DATA_NAME,encryData);
+        cc.sys.localStorage.setItem(GUANQIA_DATA_NAME,jsonData);
     },
 
     //根据下标(页面)获取一个关卡集
