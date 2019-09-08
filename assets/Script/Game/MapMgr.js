@@ -2,7 +2,7 @@
 //把4000 * 2000的地图划分成块区域，每一块为 400 * 250
 //划成块是便于对驻留怪生成的管理，对移动怪无效
 
-var Common = require("Common");
+var Common = require("../Common/Common");
 
 cc.Class({
     extends: cc.Component,
@@ -67,7 +67,7 @@ cc.Class({
         }      
         //随机打乱数组，造成每次取的相邻顺序都不一样
         //打乱两次，让它乱一点
-        for(let i = 1; i < 3; i++){
+        for(let i = 0; i < 3; i++){
             tmp.sort(function(){
                 let rand = Math.random();
                 //console.log("_getNearEmptyBlockIdx rand = " + rand);

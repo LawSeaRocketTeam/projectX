@@ -1,16 +1,16 @@
 {
-    "rows": 3, 
+    "title": "F:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx",
+    "rows": 3,
     "children": [
         {
-            "monsterType": "", 
-            "fortId": 1, 
-            "roundCount": 1
-        }, 
+            "fortId": 1,
+            "roundCount": 1,
+            "monsterType": ""
+        },
         {
-            "monsterType": "", 
-            "fortId": 1, 
-            "roundCount": 2
+            "fortId": 1,
+            "roundCount": 2,
+            "monsterType": ""
         }
-    ], 
-    "title": "E:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
+    ]
 }

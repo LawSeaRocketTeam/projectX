@@ -1,4 +1,4 @@
-var Common = require("Common");
+var Common = require("../Common/Common");
 //标靶目标管理脚本
 cc.Class({
     extends: cc.Component,

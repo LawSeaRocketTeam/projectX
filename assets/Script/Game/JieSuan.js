@@ -20,6 +20,8 @@ cc.Class({
         lbName : cc.Label,
         nCoin : cc.Node,
         shootNode : cc.Node,
+        btReChallenge : cc.Node,
+        btNext : cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -40,11 +42,15 @@ cc.Class({
                 this.lbCoin.string = gqCfgData.goldAward * 0.1;
             else
             this.lbCoin.string = gqCfgData.goldAward;
+            this.btNext.active = true;
+            this.btReChallenge.active = false;
         }
         else{
             this.lbName.string = cc.vv.i18n.t("js_failed")
             this.nCoin.active = false;
             this.lbCoin.string = 0;
+            this.btNext.active = false;
+            this.btReChallenge.active = true;
         }
         let shootCtrl = this.shootNode.getComponent("ShootController");
         this.lbKill.string = shootCtrl.killTargetCount;
@@ -62,6 +68,11 @@ cc.Class({
         this.node.active = false;
         //获取下一关Id，并全局设置
         cc.vv.sceneParam.id = cc.vv.dataMgr.getNextGuanQiaIdById(cc.vv.sceneParam.id)
+        cc.vv.gameNode.emit("game_refresh");
+    },
+
+    onRechallengeClick:function(event, customEventData){
+        this.node.active = false;
         cc.vv.gameNode.emit("game_refresh");
     },
 

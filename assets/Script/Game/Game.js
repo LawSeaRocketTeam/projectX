@@ -1,4 +1,4 @@
-var Common = require("Common")
+var Common = require("../Common/Common")
 //const i18n = require('LanguageData');
 
 cc.Class({
@@ -59,6 +59,7 @@ cc.Class({
         this.isJieSuaning = false;
         this.spBg.position = cc.v2(0,0);
         this.gameLeiJiTime = 0;
+        this.testBackClick = false;
     },
 
     update (dt) {
@@ -125,6 +126,10 @@ cc.Class({
         this.targetsMgr.refresh();
         this.shootCtrl.refresh();
         this._mapLoadFinish();
+        for(let k in this.uMonsterCfgData){
+            let monsterData = this.uMonsterCfgData[k];
+            monsterData.updateDelta = undefined
+        }
     },
 
     //初始化游戏
@@ -186,8 +191,11 @@ cc.Class({
         let nBullet = cc.find("lbBullet",this.introduceNode);
         let content = "";
         if(this.gqCfgData.gTargetType == 1){
+            let targetId = this.taskParam[0]
+            let MonsterData = cc.vv.dataMgr.getMonsterCfgDataById(targetId);
+            let name = cc.vv.i18n.t("target" + MonsterData.monsterType);
             content = cc.vv.i18n.t("game_task_info_content1")
-            content = Common.stringFormat(content,this.taskParam[1]);
+            content = Common.stringFormat(content,name,this.taskParam[1]);
             lbContent.string = content;
             content = cc.vv.i18n.t("limit_time")
             if(this.gqCfgData.limitTime > 0 ){
@@ -217,11 +225,13 @@ cc.Class({
     //判断是否达到胜利条件
     //p1:是否发送结算
     _isWin : function(_isEmit){
+        if(cc.vv.sceneParam.gameMode == "test")
+            return;
         if(_isEmit == undefined)
             _isEmit = true;
         let ret = false;
         if(this.gqCfgData.gTargetType == 1){        //射击指定数量目标
-            let id = this.taskParam[0];
+            let id = parseInt(this.taskParam[0]);
             let count = this.taskParam[1]
             let beKilledCount = this.targetsMgr.getBeKillCountById(id);
             if(beKilledCount >= count){
@@ -383,7 +393,7 @@ cc.Class({
     //操作测试
     _testGame : function() {
         //生成10个长期驻守目标
-        this.mapMgr.generateTermTargetsNearShootPos(50,10,Common.TargetType.LongTerm,-1,0);
+        this.mapMgr.generateTermTargetsNearShootPos(10001,50,10,Common.TargetType.LongTerm,-1,0);
     },
 
     //------------------------------------------------------------监听事件Begin-------------------------------
@@ -406,13 +416,15 @@ cc.Class({
 
       //所有目标被清空
     _allTargetClear : function(){
-        if(cc.vv.sceneParam.gameMode == "test"){
+        if(cc.vv.sceneParam.gameMode == "test" && this.testBackClick == false){
             this._testGame();
         }
     },
 
     //设置命中率,子弹数量
     _setHitRate : function(){
+        if(cc.vv.sceneParam.gameMode == "test")
+            return;
         this.lbHitRate.string = this.shootCtrl.getHitRate() + "%"
         //是否限制子弹,是则修改子弹数量
         if(this.gqCfgData.limitBullet > 0){
@@ -477,6 +489,7 @@ cc.Class({
     },
 
     onBackClick : function(event, customEventData){
+        this.testBackClick = true;
         this.targetsMgr.removeAllTargets();
         cc.vv.sceneParam.showLayer = "opSetting";
         cc.director.loadScene("loginScene");

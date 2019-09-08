@@ -22,7 +22,7 @@ cc.Class({
 
     refresh : function(){
         this.removeAllTargets();
-        this.beKilled_targetsId.length = 0;
+        this.beKilled_targetsId =  [];
     },
 
     //获取处于闲置状态的target
@@ -124,6 +124,8 @@ cc.Class({
             let v = this.beKilled_targetsId[i];
             if(v.id == _id){
                 v.count++;
+                bFind = true;
+                break;
             }
         }
         if(!bFind){

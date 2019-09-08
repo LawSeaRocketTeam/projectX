@@ -1,22 +1,22 @@
 {
-    "rows": 5, 
+    "title": "F:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx",
+    "rows": 5,
     "children": [
         {
-            "monsterId": 10001, 
-            "uMonsterId": 101
-        }, 
+            "uMonsterId": 101,
+            "monsterId": 10001
+        },
         {
-            "monsterId": "10002,10003", 
-            "uMonsterId": 102
-        }, 
+            "uMonsterId": 102,
+            "monsterId": "10002,10003"
+        },
         {
-            "monsterId": "10004", 
-            "uMonsterId": 103
-        }, 
+            "uMonsterId": 103,
+            "monsterId": "10004"
+        },
         {
-            "monsterId": "10005,10006,10007", 
-            "uMonsterId": 104
+            "uMonsterId": 104,
+            "monsterId": "10005,10006,10007"
         }
-    ], 
-    "title": "E:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
+    ]
 }
