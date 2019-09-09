@@ -87,6 +87,39 @@ cc.Class({
         return this._getNearEmptyBlockIdx(_idx + tmp[0]);
     },
 
+    //获取靠近距离块指定距离的目标块
+    //添加生成方向是因为考虑到时随机生成的，不能控制到生成的范围，所以从配置表取生成方向后再随机，那么包围堡垒看起来更平均
+    //_idx : 指定块下标
+    //_dis ：指定距离
+    //_dir : 生成方向 1上 2左 3下 4右
+    _getEmptyBlockIdxByDis : function(_idx,_dis,_dir){
+        _range = _range|| 1;
+        let tmp = [];
+        //let row = _dis / ; //第几行符合距离
+        
+
+        //随机打乱数组，造成每次取的相邻顺序都不一样
+        //打乱两次，让它乱一点
+        for(let i = 0; i < 3; i++){
+            tmp.sort(function(){
+                let rand = Math.random();
+                //console.log("_getNearEmptyBlockIdx rand = " + rand);
+                return rand > 0.5 ? -1:1;})
+        }
+        //console.log("----------------tmp array = " + tmp);
+        for(let v of tmp){
+            let nearIdx = _idx + v;
+            if(nearIdx >= this.arrBlocks.length || nearIdx < 0){
+                continue;
+            }
+            if(this.arrBlocks[nearIdx].targets.length == 0){
+                return nearIdx;
+            }
+        }
+        //如果一个都找不到，返回-1
+        return -1;
+    },
+
     //获取地图上某个点所在的块下标
     getPointInBlockIdx(_pos){
         for(let i = 0; i < this.arrBlocks.length; i++){
@@ -214,6 +247,14 @@ cc.Class({
                 hasGen += this.generateTargetsInBlockByIdx(_id,nearBlockIdx,_radius,genCount,_type,_activeTime,_genDipTime);
             }
         }
+    },
+
+    //在距离堡垒中心点指定距离外生成靠近堡垒目标
+    //_radius : 目标半径
+    //_fortPos : 堡垒坐标
+    //_fortDis : 距离堡垒距离
+    generateAttFortTargetNearFort : function(_id,_radius,_fortPos,_fortDis){
+
     },
 
     //创建移动类型目标
