@@ -95,9 +95,35 @@ cc.Class({
     _getEmptyBlockIdxByDis : function(_idx,_dis,_dir){
         _range = _range|| 1;
         let tmp = [];
-        //let row = _dis / ; //第几行符合距离
+        let row = Math.floor(_dis / this.block_h);
+        let line = Math.floor(_dis / this.block.w);
         
-
+        switch(_dir){
+            case 1:
+                let initNum = _idx-this.blockWCount*row-line;
+                for(i = 0; i < 2*line; i++){
+                    tmp.push(initNum + i);
+                }
+                break;
+            case 2:
+                let initNum = _idx-this.blockWCount*row-line;
+                for(i = 0; i < 2*row; i++){
+                    tmp.push(initNum + i * this.blockWCount);
+                }
+                break;
+            case 3:
+                let initNum = _idx+this.blockWCount*row-line;
+                for(i = 0; i < 2*line; i++){
+                    tmp.push(initNum + i);
+                }
+                break;
+            case 4:
+                let initNum = _idx-this.blockWCount*row+line;
+                for(i = 0; i < 2*row; i++){
+                    tmp.push(initNum + i * this.blockWCount);
+                }
+                break;
+        }
         //随机打乱数组，造成每次取的相邻顺序都不一样
         //打乱两次，让它乱一点
         for(let i = 0; i < 3; i++){
@@ -139,9 +165,10 @@ cc.Class({
     //_activeTime 对于短期驻留怪，存活时间
     //_genDipTime 在同一块区生成多个时，间隔多久生成1个,默认0
     //ret 返回生成了多少个目标
-    generateTargetsInBlockByIdx :function(_id,_idx,_radius,_count,_type,_activeTime,_genDipTime){
+    generateTargetsInBlockByIdx :function(_id,_idx,_radius,_count,_type,_activeTime,_genDipTime,_direction){
         _activeTime = _activeTime|| -1;
         _genDipTime = _genDipTime|| 0;  
+        _direction = _direction || 0;
         let block = this.arrBlocks[_idx];
         let hasGenCount = 0;
         //初始化布局数组
@@ -217,7 +244,7 @@ cc.Class({
                     let x = block.pos.x + targetX;
                     let y = block.pos.y + targetY;
                     //let tc = target.getComponent("TargetController");
-                    targetController.refresh(_type,cc.v2(x,y),_radius,_activeTime);
+                    targetController.refresh(_type,cc.v2(x,y),_radius,_activeTime,-1,_direction);
                     target.parent = this.spbg
                 }.bind(this), delayTime);
             }
@@ -253,8 +280,16 @@ cc.Class({
     //_radius : 目标半径
     //_fortPos : 堡垒坐标
     //_fortDis : 距离堡垒距离
-    generateAttFortTargetNearFort : function(_id,_radius,_fortPos,_fortDis){
-
+    //_dir : 生成方向 1上 2左 3下 4右
+    generateAttFortTargetNearFort : function(_id,_radius,_fortPos,_fortDis,_dir){
+        let fortBlockIdx = this.getPointInBlockIdx(_fortPos);
+        let nearBlockIdx = this._getEmptyBlockIdxByDis(fortBlockIdx,_fortDis,_dir)
+        
+        if( nearBlockIdx != -1){
+            //计算两点间距离
+            let vec = _fortPos.sub(this.startPoint - this.arrBlocks[nearBlockIdx].pos);
+            this.generateTargetsInBlockByIdx(_id,nearBlockIdx,_radius,1,Common.TargetType.AttFort,-1,0,Common.vectorsToDegress(vec));
+        }
     },
 
     //创建移动类型目标

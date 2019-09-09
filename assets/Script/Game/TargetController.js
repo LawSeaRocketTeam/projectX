@@ -48,11 +48,11 @@ cc.Class({
 
     // },
     //Func：刷新数据
-    //Param1:目标类型
-    //Param2:位置
-    //Param3:存活时间
-    //Param4:移动速度
-    //Param5:移动方向角度
+    //_tarType:目标类型
+    //_position:位置
+    //_activeTime:存活时间
+    //_speed:移动速度
+    //_direction:移动方向角度
     refresh: function(_tarType,_position,_radius,_activeTime,_speed,_direction)
     {
         let date = new Date();
@@ -211,6 +211,9 @@ cc.Class({
                     this.dirDegress += 180;
                 }
             }
+            else if(other.node.name == "fort_collider"){    //堡垒碰撞
+                    
+            }   
             
             this.dirDegress = this.dirDegress < 360 ? this.dirDegress : this.dirDegress - 360;
             this.dirVec = Common.degreesToVectors(this.dirDegress);
@@ -243,7 +246,7 @@ cc.Class({
         //移动类型目标处理
         if(this.tarType == Common.TargetType.RandomMove || this.tarType== Common.TargetType.HideRandomMove ||
             this.tarType == Common.TargetType.SplitMove || this.tarType == Common.TargetType.People ||
-            this.tarType == Common.TargetType.SpyMove){
+            this.tarType == Common.TargetType.SpyMove || this.tarType == Common.TargetType.AttFort){
             this.node.x += this.speed * this.dirVec.x * dt;
             this.node.y += this.speed * this.dirVec.y * dt;
             //console.log('update pos = ' + this.node.position + "tag = " + this.node.name);
