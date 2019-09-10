@@ -1,17 +1,17 @@
 {
-    "title": "F:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx",
-    "rows": 2,
+    "rows": 2, 
     "children": [
         {
-            "uManId": 201,
-            "manId": 20001,
-            "img": "",
-            "refreshInterval": 5,
-            "isGenOnStart": 0,
-            "initGenTime": -1,
-            "isFort": 0,
-            "fortGenPos": -1,
-            "fortHp": -1
+            "img": "", 
+            "initGenTime": -1, 
+            "fortHp": -1, 
+            "isFort": 0, 
+            "manId": 20001, 
+            "refreshInterval": 5, 
+            "uManId": 201, 
+            "fortGenPos": -1, 
+            "isGenOnStart": 0
         }
-    ]
+    ], 
+    "title": "E:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
 }

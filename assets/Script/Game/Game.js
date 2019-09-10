@@ -331,6 +331,11 @@ cc.Class({
             tarCtrl.setSpyAndManTime(_monsterData.manShowInterval,_monsterData.manShowDelta);
             tarCtrl.setId(_monsterData.monsterId);
         }
+        else if(_monsterData.monsterType == Common.TargetType.AttFort){
+            let shootCtrl = this.shootNode.getComponent("ShootController");
+            let pos = shootCtrl.getShootPoint();
+            this.mapMgr.generateAttFortTargetNearFort(_monsterData.monsterId,_radius,_monsterData.speed,pos,_monsterData.movePosID,_monsterData.genPos);
+        }
     },
 
     //初始化关卡数据
@@ -353,7 +358,7 @@ cc.Class({
             },
          */
         this.gqCfgData = cc.vv.dataMgr.getGuanQiaCfgDataById(this.guanQiaId);
-        this.taskParam = this.gqCfgData.typeParam.split(',');   //不同任务类型有不同的参数
+        this.taskParam = this.gqCfgData.typeParam.toString().split(',');   //不同任务类型有不同的参数
         /**
          * {
             "uMonsterId": 101,

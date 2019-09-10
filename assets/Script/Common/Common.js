@@ -53,7 +53,7 @@ var Common = cc.Class({
         //已知向量求角度
         vectorsToDegress: function (dirVec) {
             let comVec = cc.v2(0, 1);    // 水平向右的对比向量
-            let radian = dirVec.signAngle(vec);    // 求方向向量与对比向量间的弧度
+            let radian = dirVec.signAngle(comVec);    // 求方向向量与对比向量间的弧度
             let degree = cc.misc.radiansToDegrees(radian);    // 将弧度转换为角度
             return degree;
         },

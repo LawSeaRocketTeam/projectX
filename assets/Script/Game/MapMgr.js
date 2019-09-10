@@ -93,34 +93,42 @@ cc.Class({
     //_dis ：指定距离
     //_dir : 生成方向 1上 2左 3下 4右
     _getEmptyBlockIdxByDis : function(_idx,_dis,_dir){
-        _range = _range|| 1;
         let tmp = [];
         let row = Math.floor(_dis / this.block_h);
-        let line = Math.floor(_dis / this.block.w);
+        let line = Math.floor(_dis / this.block_w);
         
-        switch(_dir){
+        switch(parseInt(_dir)){
             case 1:
-                let initNum = _idx-this.blockWCount*row-line;
-                for(i = 0; i < 2*line; i++){
-                    tmp.push(initNum + i);
+                {
+                    let initNum = _idx-this.blockWCount*row-line;
+                    for(let i = 0; i < 2*line; i++){
+                        tmp.push(initNum + i);
+                    }
                 }
                 break;
             case 2:
-                let initNum = _idx-this.blockWCount*row-line;
-                for(i = 0; i < 2*row; i++){
-                    tmp.push(initNum + i * this.blockWCount);
+                {
+                    let initNum = _idx-this.blockWCount*row-line;
+                    for(let i = 0; i < 2*row; i++){
+                        tmp.push(initNum + i * this.blockWCount);
+                    }
                 }
+                
                 break;
             case 3:
-                let initNum = _idx+this.blockWCount*row-line;
-                for(i = 0; i < 2*line; i++){
-                    tmp.push(initNum + i);
+                {
+                    let initNum = _idx+this.blockWCount*row-line;
+                    for(let i = 0; i < 2*line; i++){
+                        tmp.push(initNum + i);
+                    }
                 }
                 break;
             case 4:
-                let initNum = _idx-this.blockWCount*row+line;
-                for(i = 0; i < 2*row; i++){
-                    tmp.push(initNum + i * this.blockWCount);
+                {
+                    let initNum = _idx-this.blockWCount*row+line;
+                    for(let i = 0; i < 2*row; i++){
+                        tmp.push(initNum + i * this.blockWCount);
+                    }
                 }
                 break;
         }
@@ -134,7 +142,7 @@ cc.Class({
         }
         //console.log("----------------tmp array = " + tmp);
         for(let v of tmp){
-            let nearIdx = _idx + v;
+            let nearIdx = v;
             if(nearIdx >= this.arrBlocks.length || nearIdx < 0){
                 continue;
             }
@@ -165,10 +173,11 @@ cc.Class({
     //_activeTime 对于短期驻留怪，存活时间
     //_genDipTime 在同一块区生成多个时，间隔多久生成1个,默认0
     //ret 返回生成了多少个目标
-    generateTargetsInBlockByIdx :function(_id,_idx,_radius,_count,_type,_activeTime,_genDipTime,_direction){
+    generateTargetsInBlockByIdx :function(_id,_idx,_radius,_count,_type,_activeTime,_genDipTime,_direction,_speed){
         _activeTime = _activeTime|| -1;
         _genDipTime = _genDipTime|| 0;  
         _direction = _direction || 0;
+        _speed = _speed || 0;
         let block = this.arrBlocks[_idx];
         let hasGenCount = 0;
         //初始化布局数组
@@ -244,7 +253,7 @@ cc.Class({
                     let x = block.pos.x + targetX;
                     let y = block.pos.y + targetY;
                     //let tc = target.getComponent("TargetController");
-                    targetController.refresh(_type,cc.v2(x,y),_radius,_activeTime,-1,_direction);
+                    targetController.refresh(_type,cc.v2(x,y),_radius,_activeTime,_speed,_direction);
                     target.parent = this.spbg
                 }.bind(this), delayTime);
             }
@@ -278,17 +287,16 @@ cc.Class({
 
     //在距离堡垒中心点指定距离外生成靠近堡垒目标
     //_radius : 目标半径
+    //_speed : 速度
     //_fortPos : 堡垒坐标
     //_fortDis : 距离堡垒距离
     //_dir : 生成方向 1上 2左 3下 4右
-    generateAttFortTargetNearFort : function(_id,_radius,_fortPos,_fortDis,_dir){
+    generateAttFortTargetNearFort : function(_id,_radius,_speed,_fortPos,_fortDis,_dir){
         let fortBlockIdx = this.getPointInBlockIdx(_fortPos);
         let nearBlockIdx = this._getEmptyBlockIdxByDis(fortBlockIdx,_fortDis,_dir)
-        
-        if( nearBlockIdx != -1){
-            //计算两点间距离
-            let vec = _fortPos.sub(this.startPoint - this.arrBlocks[nearBlockIdx].pos);
-            this.generateTargetsInBlockByIdx(_id,nearBlockIdx,_radius,1,Common.TargetType.AttFort,-1,0,Common.vectorsToDegress(vec));
+        if(nearBlockIdx != -1){
+            let vec = _fortPos.sub(this.arrBlocks[nearBlockIdx].pos);
+            this.generateTargetsInBlockByIdx(_id,nearBlockIdx,_radius,1,Common.TargetType.AttFort,-1,0,Common.vectorsToDegress(vec),_speed);
         }
     },
 

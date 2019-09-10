@@ -196,12 +196,28 @@ cc.Class({
             let v = this.configUmonsters.children[k];
             if(v.uMonsterId == _uid){
                 //monsters.push(v);
-                let monstersId = String(v.monsterId).split(',');
+                let monstersId = [];
+                if(v.type == 1){
+                    monstersId = String(v.monsterId).split(',');
+                }   
+                else if(v.type == 2){
+                    let tmp = v.monsterId.split(';');
+                    for(let id of tmp)
+                    {
+                        let mc = id.split(',');
+                        for(let i = 0; i < parseInt(mc[1]); i++ ){
+                            monstersId.push(mc[0]);
+                        }
+                    }
+                }
                 for(let id of monstersId){
                     for(let i in this.configMonsterData.children){
                         let md = this.configMonsterData.children[i];
                         if(md.monsterId == id){
-                            monsters.push(md);
+                            //需要对JSON进行深度克隆,直接使用md会出现相同ID的使用了同一份数据
+                            //这种深度克隆只能针对纯数据的，对于有方法在里面的，会被忽略，要注意
+                            let newMd = JSON.parse(JSON.stringify(md));
+                            monsters.push(newMd);
                         }
                     }
                 }
