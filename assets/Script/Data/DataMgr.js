@@ -157,7 +157,7 @@ cc.Class({
             let v = this.configGuanQiaData[k];
             let x = Math.floor(v.gId / 1000);
             if(x == _idx){
-                utils.push(v);
+                utils.push(JSON.parse(JSON.stringify(v)));
             }
         }
         return utils;
@@ -168,7 +168,7 @@ cc.Class({
         for(let k in this.configGuanQiaData){
             let v = this.configGuanQiaData[k];
             if(v.gId == _gid){
-                return v;
+                return JSON.parse(JSON.stringify(v));
             }
         }
         return undefined;
@@ -232,7 +232,7 @@ cc.Class({
         for(let k in this.configMonsterData.children){
             let md = this.configMonsterData.children[k];
             if(md.monsterId == _id){
-                return md;
+                return JSON.parse(JSON.stringify(md));
             }
         }
     },
@@ -243,7 +243,7 @@ cc.Class({
         for(let k in this.configManData.children){
             let v = this.configManData.children[k];
             if(v.uManId == _uid){
-                men.push(v);
+                men.push(JSON.parse(JSON.stringify(v)));
             }
         }
         return men;
@@ -255,7 +255,7 @@ cc.Class({
         for(let k in this.configSupplyData.children){
             let v = this.configSupplyData.children[k]
             if(v.uSuplyId == _uid){
-                supply.push(v);
+                supply.push(JSON.parse(JSON.stringify(v)));
             }
         }
         return supply;
@@ -266,10 +266,20 @@ cc.Class({
         for(let k in this.configMovePosUtil.children){
             let v = this.configMovePosUtil.children[k]
             if(v.movePosID == _id){
-                return v;
+                return JSON.parse(JSON.stringify(v));
             }
         }
         return undefined;
-    }
+    },
 
+    //根据堡垒ID获取堡垒数据
+    getFortCfgDataById : function(_id){
+        for(let k in this.configFortData.children){
+            let v = this.configFortData.children[k]
+            if(v.fortId == _id){
+                return JSON.parse(JSON.stringify(v));
+            }
+        }
+        return undefined;
+    },
 });

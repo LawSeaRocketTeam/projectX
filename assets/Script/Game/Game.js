@@ -179,6 +179,10 @@ cc.Class({
         this.schedule(this._updateTimer,1);
         this.isGameInit = true;
         this.shootCtrl.setCanShoot(true);
+        //如果是要塞模式，生成一个要塞
+        if(this.gqCfgData.gTargetType == 4){
+            this.mapMgr.generateFort(this.taskParam[0])
+        }
     },
 
     //显示关卡任务介绍
@@ -389,7 +393,15 @@ cc.Class({
             "monsterHp": 1
         },
          */
-        this.uMonsterCfgData = cc.vv.dataMgr.getMonsterCfgDataByUid(this.gqCfgData.uMonsterId); //怪物集配置数据
+        if(this.gqCfgData.gTargetType == 4){
+            //守护要塞模式
+            this.cfgFortData = cc.vv.dataMgr.getFortCfgDataById(this.taskParam[0]);
+            this.cfgFortData.uMonsterId = this.cfgFortData.uMonsterId.toString().split(',');    //字符串转换成数组
+            this.uMonsterCfgData = cc.vv.dataMgr.getMonsterCfgDataByUid(this.cfgFortData.uMonsterId[0]); //怪物集配置数据
+        } 
+        else{
+            this.uMonsterCfgData = cc.vv.dataMgr.getMonsterCfgDataByUid(this.gqCfgData.uMonsterId); //怪物集配置数据
+        }
         this.uMenCfgData = cc.vv.dataMgr.getMenCfgDataByUid(this.gqCfgData.uManId); //平民集配置数据
         this.uSupplyCfgData = cc.vv.dataMgr.getSupplyCfgDataByUid(this.gqCfgData.uSupplyId);    //补给集配置数据
         

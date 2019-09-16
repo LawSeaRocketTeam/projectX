@@ -285,6 +285,12 @@ cc.Class({
         }
     },
 
+    //生成堡垒
+    generateFort : function(_id){
+        let fort = this.targetsMgr.getFortTarget(_id);
+        fort.parent = this.spbg;
+    },
+
     //在距离堡垒中心点指定距离外生成靠近堡垒目标
     //_radius : 目标半径
     //_speed : 速度

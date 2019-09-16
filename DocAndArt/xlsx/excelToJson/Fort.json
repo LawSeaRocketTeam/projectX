@@ -2,14 +2,20 @@
     "rows": 3, 
     "children": [
         {
-            "monsterType": "", 
+            "roundCount": 2, 
             "fortId": 1, 
-            "roundCount": 1
+            "fortPos": "0,0", 
+            "uMonsterId": 105106, 
+            "monsterType": "", 
+            "fortHp": 6
         }, 
         {
+            "roundCount": 1, 
+            "fortId": 2, 
+            "fortPos": "0,0", 
+            "uMonsterId": 106, 
             "monsterType": "", 
-            "fortId": 1, 
-            "roundCount": 2
+            "fortHp": 6
         }
     ], 
     "title": "E:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"

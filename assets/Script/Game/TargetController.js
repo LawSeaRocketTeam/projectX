@@ -211,8 +211,8 @@ cc.Class({
                     this.dirDegress += 180;
                 }
             }
-            else if(other.node.name == "fort_collider"){    //堡垒碰撞
-                    
+            else if(other.node.name == "spFort"){    //堡垒碰撞
+                this.targetsMgr.addIdleTarget(this.node);    
             }   
             
             this.dirDegress = this.dirDegress < 360 ? this.dirDegress : this.dirDegress - 360;

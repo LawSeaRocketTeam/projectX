@@ -6,6 +6,7 @@ cc.Class({
 
     properties: {
         targetPrefab : cc.Prefab,
+        fortPrefab : cc.Prefab,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -153,6 +154,13 @@ cc.Class({
             sum += v.count;
         }
         return sum;
+    },
+
+    //创建一个堡垒目标
+    getFortTarget : function(_fortId){
+        let target = cc.instantiate(this.fortPrefab);
+        target.getComponent("FortController").init(_fortId);
+        return target
     },
 
     // update (dt) {},

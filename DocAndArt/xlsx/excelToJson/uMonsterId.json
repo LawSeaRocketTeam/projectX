@@ -1,5 +1,5 @@
 {
-    "rows": 6, 
+    "rows": 7, 
     "children": [
         {
             "monsterId": 10001, 
@@ -22,9 +22,14 @@
             "uMonsterId": 104
         }, 
         {
-            "monsterId": "10008,3;10009,4;10010,3;10011,4;10012,5;10013,3;10014,5;10015,3;", 
+            "monsterId": "10008,1;10009,2;10010,3;10011,1;10012,2;10013,3;10014,2;10015,1;", 
             "type": 2, 
             "uMonsterId": 105
+        }, 
+        {
+            "monsterId": "10008,3;10009,3;10010,3;10011,3;10012,3;10013,3;10014,3;10015,3;", 
+            "type": 2, 
+            "uMonsterId": 106
         }
     ], 
     "title": "E:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
