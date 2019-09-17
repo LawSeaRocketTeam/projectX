@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.7161458333333334,
-      "y": 0.7161458333333334,
+      "x": 0.56640625,
+      "y": 0.56640625,
       "z": 1
     },
     "_quat": {
@@ -10418,6 +10418,9 @@
     "_enabled": true,
     "targetPrefab": {
       "__uuid__": "0d79ce50-02dd-4457-8cdf-815700261ef0"
+    },
+    "fortPrefab": {
+      "__uuid__": "550782cf-d1d1-4bf1-8eda-9791f639f970"
     },
     "_id": "8fsTNB1OBMx6vwranzcEgN"
   },

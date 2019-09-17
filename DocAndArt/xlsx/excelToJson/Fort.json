@@ -5,7 +5,7 @@
             "roundCount": 2, 
             "fortId": 1, 
             "fortPos": "0,0", 
-            "uMonsterId": 105106, 
+            "uMonsterId": "105,105", 
             "monsterType": "", 
             "fortHp": 6
         }, 
@@ -18,5 +18,5 @@
             "fortHp": 6
         }
     ], 
-    "title": "E:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
+    "title": "E:\\creatorProjects\\projectX\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
 }

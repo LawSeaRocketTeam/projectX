@@ -7,7 +7,7 @@ cc.Class({
     },
 
     init : function(_id){
-        this.id = id;
+        this.id = _id;
         this.cfgFortData = cc.vv.dataMgr.getFortCfgDataById(_id);
         this.hp = this.cfgFortData.fortHp;
         let arrPos = this.cfgFortData.fortPos.split(',');

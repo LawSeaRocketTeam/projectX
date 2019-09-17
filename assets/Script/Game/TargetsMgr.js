@@ -113,6 +113,17 @@ cc.Class({
         return {beShoot:ret,isPerfect:perfect,reactionTime:reactionTime};
     },
 
+    //检查场上是否有同类型怪
+    checkIsExistSameTypeTarget : function(_id){
+        for(let k in this.use_targets){
+            let v = this.use_targets[k].getComponent("TargetController");
+            if(v.id == _id){
+                return true;
+            }
+        }
+        return false;
+    },
+
     //返回场上的目标个数
     getInUseTargetsCount : function(){
         return this.use_targets.length;
@@ -167,6 +178,6 @@ cc.Class({
 
     onDestroy() {
         this.cached_targets.clear();
-        this.beKilled_targetsId.length = 0;
+        this.beKilled_targetsId = [];
     }
 });

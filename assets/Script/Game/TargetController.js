@@ -161,6 +161,10 @@ cc.Class({
 
     //进入碰撞后触发
     onCollisionEnter: function (other, self) {
+
+        if(other.node.name == "spFort"){    //堡垒碰撞
+            this.targetsMgr.addIdleTarget(this.node);    
+        }   
         //tag值是为了避免其他目标之间互相碰撞     
         if(!this.dirChange && other.tag == 2){
             //console.log('on collision onCollisionEnter = ' + self.node.name);
@@ -211,15 +215,10 @@ cc.Class({
                     this.dirDegress += 180;
                 }
             }
-            else if(other.node.name == "spFort"){    //堡垒碰撞
-                this.targetsMgr.addIdleTarget(this.node);    
-            }   
-            
             this.dirDegress = this.dirDegress < 360 ? this.dirDegress : this.dirDegress - 360;
             this.dirVec = Common.degreesToVectors(this.dirDegress);
             this.dirChange = true;
-            //console.log('on collision enter dirDegress = ' + this.dirDegress);
-            
+            //console.log('on collision enter dirDegress = ' + this.dirDegress);   
         }     
     },
 

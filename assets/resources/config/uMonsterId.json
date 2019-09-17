@@ -22,7 +22,7 @@
             "uMonsterId": 104
         }, 
         {
-            "monsterId": "10008,1;10009,2;10010,3;10011,1;10012,2;10013,3;10014,2;10015,1;", 
+            "monsterId": "10008,1;10009,1;10010,1;10011,1;", 
             "type": 2, 
             "uMonsterId": 105
         }, 
@@ -32,5 +32,5 @@
             "uMonsterId": 106
         }
     ], 
-    "title": "E:\\creatorProjects\\projectXs\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
+    "title": "E:\\creatorProjects\\projectX\\DocAndArt\\xlsx\\excelToJson\\config.xlsx"
 }

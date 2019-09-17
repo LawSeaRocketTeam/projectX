@@ -92,6 +92,12 @@ cc.Class({
                 }
                 else{
                     //判断场上是否有同类型怪
+                    if(!this.targetsMgr.checkIsExistSameTypeTarget(monsterData.monsterId)){
+                        //生成怪
+                        this._generateMonster(monsterData,50);
+                        //重置更新累计时间
+                        monsterData.updateDelta = 0
+                    }
                 }
             }
         }
@@ -123,12 +129,16 @@ cc.Class({
         this.limitTime = -1;
         this.limitBullet = -1;
         this.lbLimitMiss = -1;
+        this.monsterRound = 0; 
         this.targetsMgr.refresh();
         this.shootCtrl.refresh();
         this._mapLoadFinish();
         for(let k in this.uMonsterCfgData){
             let monsterData = this.uMonsterCfgData[k];
             monsterData.updateDelta = undefined
+        }
+        if(this.fortNode){
+            this.fortNode.removeFromParent();
         }
     },
 
@@ -181,7 +191,7 @@ cc.Class({
         this.shootCtrl.setCanShoot(true);
         //如果是要塞模式，生成一个要塞
         if(this.gqCfgData.gTargetType == 4){
-            this.mapMgr.generateFort(this.taskParam[0])
+            this.fortNode = this.mapMgr.generateFort(this.taskParam[0])
         }
     },
 
@@ -217,7 +227,31 @@ cc.Class({
                 content = Common.stringFormat(content,'不限');
             }
             nBullet.getComponent(cc.Label).string = content;
+            nLimitTime.active = true;
+            nBullet.active = true;
         }
+        else if(this.gqCfgData.gTargetType == 2){
+            content = cc.vv.i18n.t("game_Task_info_content2")
+            content = Common.stringFormat(content,this.taskParam[0]);
+            lbContent.string = content;
+            nLimitTime.active = false;
+            nBullet.active = false;
+        }
+        else if(this.gqCfgData.gTargetType == 3){
+            content = cc.vv.i18n.t("game_Task_info_content3")
+            content = Common.stringFormat(content,this.taskParam[0]);
+            lbContent.string = content;
+            nLimitTime.active = false;
+            nBullet.active = false;
+        }
+        else if(this.gqCfgData.gTargetType == 4){
+            content = cc.vv.i18n.t("game_Task_info_content4")
+            content = Common.stringFormat(content,this.cfgFortData.roundCount);
+            lbContent.string = content;
+            nLimitTime.active = false;
+            nBullet.active = false;
+        }
+
         let ac1 = cc.fadeOut(5);
         let ac2 = cc.callFunc(function(){
             this._initGame();
@@ -253,7 +287,10 @@ cc.Class({
             }
         }
         else if(this.gqCfgData.gTargetType == 4){   // 守护要塞
-            
+            let fortHp = this.fortNode.getComponent("FortController").hp
+            if(this.monsterRound == this.cfgFortData.roundCount && fortHp > 0){
+                ret = true;
+            }
         }
         if(ret && _isEmit)
             cc.vv.gameNode.emit("event_game_jiesuan",{isSucc:true});
@@ -336,13 +373,11 @@ cc.Class({
             tarCtrl.setId(_monsterData.monsterId);
         }
         else if(_monsterData.monsterType == Common.TargetType.AttFort){
-            let shootCtrl = this.shootNode.getComponent("ShootController");
-            let pos = shootCtrl.getShootPoint();
-            this.mapMgr.generateAttFortTargetNearFort(_monsterData.monsterId,_radius,_monsterData.speed,pos,_monsterData.movePosID,_monsterData.genPos);
+            this.mapMgr.generateAttFortTargetNearFort(_monsterData.monsterId,_radius,_monsterData.speed,this.fortNode.position,_monsterData.movePosID,_monsterData.genPos);
         }
     },
 
-    //初始化关卡数据
+    //初始化关卡数据,优先于INITGame调用
     _initTaskData : function(){
         this.guanQiaId = cc.vv.sceneParam.id;
         /** this.gqCfgData 数据结构
@@ -395,9 +430,10 @@ cc.Class({
          */
         if(this.gqCfgData.gTargetType == 4){
             //守护要塞模式
+            this.monsterRound = 0;//怪物波数
             this.cfgFortData = cc.vv.dataMgr.getFortCfgDataById(this.taskParam[0]);
             this.cfgFortData.uMonsterId = this.cfgFortData.uMonsterId.toString().split(',');    //字符串转换成数组
-            this.uMonsterCfgData = cc.vv.dataMgr.getMonsterCfgDataByUid(this.cfgFortData.uMonsterId[0]); //怪物集配置数据
+            this.uMonsterCfgData = cc.vv.dataMgr.getMonsterCfgDataByUid(this.cfgFortData.uMonsterId[this.monsterRound]); //怪物集配置数据
         } 
         else{
             this.uMonsterCfgData = cc.vv.dataMgr.getMonsterCfgDataByUid(this.gqCfgData.uMonsterId); //怪物集配置数据
@@ -435,6 +471,21 @@ cc.Class({
     _allTargetClear : function(){
         if(cc.vv.sceneParam.gameMode == "test" && this.testBackClick == false){
             this._testGame();
+        }
+        else{
+            //非测试状态，游戏中，适用于堡垒模式，控制波数
+            if(this.gqCfgData.gTargetType == 4){
+                this.monsterRound++;
+                if(this.monsterRound < this.cfgFortData.roundCount){
+                    //延迟修改，凸显下一波
+                    this.scheduleOnce(function() {
+                        this.uMonsterCfgData = cc.vv.dataMgr.getMonsterCfgDataByUid(this.cfgFortData.uMonsterId[this.monsterRound])
+                    }.bind(this), 2);
+                }
+                else{
+                    this._isWin(true);
+                }
+            }
         }
     },
 
