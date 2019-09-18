@@ -1,0 +1,77 @@
+{
+    "logs": [
+        {
+            "outputFile": "E:\\creatorProjects\\projectX\\build\\jsb-default\\frameworks\\runtime-src\\proj.android-studio\\app\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-zh-rCN\\values-zh-rCN.xml",
+            "map": [
+                {
+                    "source": "E:\\creatorProjects\\projectX\\build\\jsb-default\\frameworks\\cocos2d-x\\cocos\\platform\\android\\libcocos2dx\\build\\intermediates\\packaged_res\\release\\values-zh-rCN\\values-zh-rCN.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,112,167,225,284",
+                        "endColumns": "56,54,57,58,56",
+                        "endOffsets": "107,162,220,279,336"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,13,14",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "263,320,375,911,970",
+                        "endColumns": "56,54,57,58,56",
+                        "endOffsets": "315,370,428,965,1022"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\guojiesheng.DOZENCOMPANY.000\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-basement-16.0.1.aar\\6ae26f583b870c23ceda27586e1c79b0\\res\\values-zh-rCN\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "251",
+                        "endColumns": "157",
+                        "endOffsets": "408"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "105",
+                        "endColumns": "157",
+                        "endOffsets": "258"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\guojiesheng.DOZENCOMPANY.000\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-ads-17.2.0.aar\\3fbc5e0923f6c769827b2592f1092cc0\\res\\values-zh-rCN\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10",
+                        "startColumns": "0,0,0,0,0,0,0",
+                        "startOffsets": "203,264,337,397,457,521,591",
+                        "endColumns": "60,72,59,59,63,69,61",
+                        "endOffsets": "263,336,396,456,520,590,652"
+                    },
+                    "to": {
+                        "startLines": "6,7,8,9,10,11,12",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "433,498,575,639,703,771,845",
+                        "endColumns": "64,76,63,63,67,73,65",
+                        "endOffsets": "493,570,634,698,766,840,906"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\guojiesheng.DOZENCOMPANY.000\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\7bccba5002affa88b899ce57090a48ad\\res\\values-zh-rCN\\values-zh-rCN.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "15",
+                        "startColumns": "4",
+                        "startOffsets": "1027",
+                        "endColumns": "100",
+                        "endOffsets": "1123"
+                    }
+                }
+            ]
+        }
+    ]
+}

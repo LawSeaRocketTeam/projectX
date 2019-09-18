@@ -1,0 +1,6 @@
+# Referenced at E:\creatorProjects\projectX\build\jsb-default\frameworks\runtime-src\proj.android-studio\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:51
+-keep class com.google.android.gms.ads.AdActivity { <init>(...); }
+# Referenced at E:\creatorProjects\projectX\build\jsb-default\frameworks\runtime-src\proj.android-studio\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:57
+-keep class com.google.android.gms.ads.MobileAdsInitProvider { <init>(...); }
+# Referenced at E:\creatorProjects\projectX\build\jsb-default\frameworks\runtime-src\proj.android-studio\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:32
+-keep class org.cocos2dx.javascript.AppActivity { <init>(...); }

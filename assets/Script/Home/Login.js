@@ -60,5 +60,13 @@ cc.Class({
         this.testSettingLayer.active = true;
     },
 
+    onAdTestClick : function(event, customEventData){
+        if (cc.sys.OS_ANDROID == cc.sys.os) {
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AdManage", "showRewardedVideo", "()V");
+            cc.vv.msgBox.show(this.node,"广告播放")
+        }
+        console.log("onAdTestClick");
+    }
+
     // update (dt) {},
 });
