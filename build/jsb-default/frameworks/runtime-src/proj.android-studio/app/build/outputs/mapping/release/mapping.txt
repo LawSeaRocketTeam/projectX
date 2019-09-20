@@ -35853,7 +35853,7 @@ org.cocos2dx.javascript.AdManage -> org.cocos2dx.javascript.AdManage:
     void loadBannerAd() -> loadBannerAd
     void showBannerAd() -> showBannerAd
     void hideBannerAd() -> hideBannerAd
-    void loadRewardedVideoAd() -> loadRewardedVideoAd
+    void loadRewardedVideoAd(java.lang.String) -> loadRewardedVideoAd
     void showRewardedVideo() -> showRewardedVideo
     void onRewardedVideoAdLeftApplication() -> onRewardedVideoAdLeftApplication
     void onRewardedVideoAdClosed() -> onRewardedVideoAdClosed
@@ -35870,16 +35870,54 @@ org.cocos2dx.javascript.AdManage -> org.cocos2dx.javascript.AdManage:
     void onDestroy() -> onDestroy
     android.widget.LinearLayout access$000(org.cocos2dx.javascript.AdManage) -> access$000
     com.google.android.gms.ads.reward.RewardedVideoAd access$100(org.cocos2dx.javascript.AdManage) -> access$100
+    android.content.Context access$200(org.cocos2dx.javascript.AdManage) -> access$200
     void <clinit>() -> <clinit>
 org.cocos2dx.javascript.AdManage$1 -> org.cocos2dx.javascript.AdManage$1:
     void <init>() -> <init>
     void run() -> run
-org.cocos2dx.javascript.AdManage$2 -> org.cocos2dx.javascript.AdManage$2:
+org.cocos2dx.javascript.AdManage$10 -> org.cocos2dx.javascript.AdManage$2:
+    org.cocos2dx.javascript.AdManage this$0 -> a
+    void <init>(org.cocos2dx.javascript.AdManage) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$11 -> org.cocos2dx.javascript.AdManage$3:
+    org.cocos2dx.javascript.AdManage this$0 -> a
+    void <init>(org.cocos2dx.javascript.AdManage) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$12 -> org.cocos2dx.javascript.AdManage$4:
+    org.cocos2dx.javascript.AdManage this$0 -> a
+    void <init>(org.cocos2dx.javascript.AdManage) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$2 -> org.cocos2dx.javascript.AdManage$5:
     void <init>() -> <init>
     void run() -> run
-org.cocos2dx.javascript.AdManage$3 -> org.cocos2dx.javascript.AdManage$3:
+org.cocos2dx.javascript.AdManage$3 -> org.cocos2dx.javascript.AdManage$6:
+    java.lang.String val$_id -> a
+    void <init>(java.lang.String) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$4 -> org.cocos2dx.javascript.AdManage$7:
     org.cocos2dx.javascript.AppActivity val$mActivity -> a
     void <init>(org.cocos2dx.javascript.AppActivity) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$5 -> org.cocos2dx.javascript.AdManage$8:
+    org.cocos2dx.javascript.AdManage this$0 -> a
+    void <init>(org.cocos2dx.javascript.AdManage) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$6 -> org.cocos2dx.javascript.AdManage$9:
+    org.cocos2dx.javascript.AdManage this$0 -> a
+    void <init>(org.cocos2dx.javascript.AdManage) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$7 -> org.cocos2dx.javascript.AdManage$10:
+    int val$code -> a
+    org.cocos2dx.javascript.AdManage this$0 -> b
+    void <init>(org.cocos2dx.javascript.AdManage,int) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$8 -> org.cocos2dx.javascript.AdManage$11:
+    org.cocos2dx.javascript.AdManage this$0 -> a
+    void <init>(org.cocos2dx.javascript.AdManage) -> <init>
+    void run() -> run
+org.cocos2dx.javascript.AdManage$9 -> org.cocos2dx.javascript.AdManage$12:
+    org.cocos2dx.javascript.AdManage this$0 -> a
+    void <init>(org.cocos2dx.javascript.AdManage) -> <init>
     void run() -> run
 org.cocos2dx.javascript.AppActivity -> org.cocos2dx.javascript.AppActivity:
     void <init>() -> <init>

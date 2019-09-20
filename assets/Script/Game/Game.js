@@ -62,6 +62,10 @@ cc.Class({
         this.testBackClick = false;
     },
 
+    onEnable(){
+        cc.vv.curNode = this.node;
+    },
+
     update (dt) {
         if(this.isGameInit && !this.isJieSuaning){
             this._updateMonsters(dt);

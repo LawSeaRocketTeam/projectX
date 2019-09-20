@@ -25,6 +25,8 @@ cc.Class({
         cc.vv.i18n.init(cc.sys.language);   //  在全局初始化且保存好是最好了，不然每个脚本引入i18n都要初始化一次才行，太麻烦了
         var MsgBox = require("MsgBox");
         cc.vv.msgBox = new MsgBox();
+        var ADMgr = require("./AdMgr");
+        cc.vv.adMgr = new ADMgr();
      },
 
     start () {

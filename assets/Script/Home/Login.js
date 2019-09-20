@@ -41,7 +41,13 @@ cc.Class({
         let action2 = cc.moveTo(5,cc.v2(-230,287));
         let action3 = cc.sequence(action1,action2);
         this.icon.runAction(cc.repeatForever(action3));
+
+        cc.vv.adMgr.loadRewardedVideoAd("ca-app-pub-3940256099942544/5224354917");
     },
+
+    // onEnable(){
+    //     cc.vv.curNode = this.node;
+    // },
 
     onGuanKaClick:function(event, customEventData){
         //cc.director.loadScene("gameScene");
@@ -61,10 +67,7 @@ cc.Class({
     },
 
     onAdTestClick : function(event, customEventData){
-        if (cc.sys.OS_ANDROID == cc.sys.os) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AdManage", "showRewardedVideo", "()V");
-            cc.vv.msgBox.show(this.node,"广告播放")
-        }
+        cc.vv.adMgr.showRewardedVideo();
         console.log("onAdTestClick");
     }
 
