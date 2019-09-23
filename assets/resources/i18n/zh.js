@@ -51,4 +51,12 @@ window.i18n.languages['zh'] = {
     "target7" : "间歇随机移动怪",
     "target8" : "分裂怪",
     "target9" : "间谍怪",
+    "ad_oops" : "广告",
+    "ad_play" : "播放",
+    "ad_add_time" : "+{0}秒",
+    "ad_add_bullet" : "+{0}子弹",
+    "ad_add_heart" : "+{0}生命",
+    "ad_des_time" : "没时间了,看个视频加{0}秒不叻",
+    "ad_des_bullet" : "没子弹了,看个视频加{0}个蛋不叻",
+    "ad_des_heart" : "被弄了,看个视频续命啊!!!"
 };

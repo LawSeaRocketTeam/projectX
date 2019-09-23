@@ -51,4 +51,12 @@ window.i18n.languages['en'] = {
     "target7" : "Interval Random Move Target",
     "target8" : "Split Target",
     "target9" : "Spay Target ",
+    "ad_oops" : "Advert",
+    "ad_play" : "play",
+    "ad_add_time" : "+{0} Sec",
+    "ad_add_bullet" : "+{0} Bullet",
+    "ad_add_heart" : "+{0} Heart",
+    "ad_des_time" : "No Time,See A Video To Add {0} Sec",
+    "ad_des_bullet" : "No Time,See A Video To Add {0} Bullet",
+    "ad_des_heart" : "OMG,See A Video To One More Try",
 };

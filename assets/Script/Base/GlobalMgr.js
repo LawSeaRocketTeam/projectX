@@ -27,6 +27,12 @@ cc.Class({
         cc.vv.msgBox = new MsgBox();
         var ADMgr = require("./AdMgr");
         cc.vv.adMgr = new ADMgr();
+        var EventDispatcher = require("./EventDispatcherMgr");
+        cc.vv.eventDispatcher = new EventDispatcher();
+
+        //全局保存自己继承Componet的基类,
+        var BaseComponent = require("./BaseComponent");
+        cc.BaseComponent = new BaseComponent();
      },
 
     start () {
